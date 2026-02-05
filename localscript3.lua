@@ -50,7 +50,15 @@ MindClone = 30
 }
  
 local cooldowns = {}
-local unlockedPowers = {}
+local unlockedPowers = {
+    Telekinesis = true,
+    Explosion = true,
+    Control = true,
+    Protection = true,
+    Healing = true,
+    Lightning = true,
+    MindClone = true
+}
 local powerButtons = {}
 local shopOpen = false
 local selectedPower = nil
