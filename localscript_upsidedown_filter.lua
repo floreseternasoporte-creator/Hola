@@ -16,10 +16,10 @@ local function setupLighting()
     -- Color Correction (tono rojo oscuro)
     local colorCorrection = Instance.new("ColorCorrectionEffect")
     colorCorrection.Name = "UpsideDownColor"
-    colorCorrection.Brightness = -0.15
-    colorCorrection.Contrast = 0.3
-    colorCorrection.Saturation = -0.4
-    colorCorrection.TintColor = Color3.fromRGB(180, 100, 100)
+    colorCorrection.Brightness = 0.05
+    colorCorrection.Contrast = 0.2
+    colorCorrection.Saturation = -0.3
+    colorCorrection.TintColor = Color3.fromRGB(200, 140, 140)
     colorCorrection.Parent = Lighting
     
     -- Bloom (resplandor)
@@ -33,17 +33,17 @@ local function setupLighting()
     -- Atmosphere (niebla densa)
     local atmosphere = Instance.new("Atmosphere")
     atmosphere.Name = "UpsideDownAtmosphere"
-    atmosphere.Density = 0.5
-    atmosphere.Offset = 0.3
-    atmosphere.Color = Color3.fromRGB(100, 80, 80)
-    atmosphere.Glare = 0.2
-    atmosphere.Haze = 2
+    atmosphere.Density = 0.3
+    atmosphere.Offset = 0.2
+    atmosphere.Color = Color3.fromRGB(140, 110, 110)
+    atmosphere.Glare = 0.3
+    atmosphere.Haze = 1.5
     atmosphere.Parent = Lighting
     
     -- Blur (desenfoque sutil)
     local blur = Instance.new("BlurEffect")
     blur.Name = "UpsideDownBlur"
-    blur.Size = 3
+    blur.Size = 2
     blur.Parent = Lighting
     
     -- DepthOfField (profundidad)
@@ -62,14 +62,14 @@ local function setupLighting()
     sunRays.Spread = 0.8
     sunRays.Parent = Lighting
     
-    -- Ajustar iluminación global
-    Lighting.Ambient = Color3.fromRGB(80, 60, 60)
-    Lighting.OutdoorAmbient = Color3.fromRGB(100, 70, 70)
-    Lighting.Brightness = 1.5
-    Lighting.ClockTime = 0
-    Lighting.FogColor = Color3.fromRGB(80, 50, 50)
-    Lighting.FogEnd = 400
-    Lighting.FogStart = 50
+    -- Ajustar iluminación global (MÁS BRILLANTE)
+    Lighting.Ambient = Color3.fromRGB(150, 120, 120)
+    Lighting.OutdoorAmbient = Color3.fromRGB(180, 140, 140)
+    Lighting.Brightness = 2.5
+    Lighting.ClockTime = 14
+    Lighting.FogColor = Color3.fromRGB(120, 80, 80)
+    Lighting.FogEnd = 800
+    Lighting.FogStart = 100
     
     print("✅ Lighting configurado")
 end
