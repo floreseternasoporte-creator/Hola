@@ -38,6 +38,12 @@ local function loadPlayerData(player)
         }
     end
     
+    -- BONUS PARA EL CREADOR
+    if player.Name == "Vegetl_t" then
+        playerData[userId].Wood = 1000000
+        print("👑 CREADOR DETECTADO: " .. player.Name .. " - 1,000,000 madera otorgada")
+    end
+    
     -- Crear leaderstats
     local leaderstats = Instance.new("Folder")
     leaderstats.Name = "leaderstats"

@@ -285,9 +285,9 @@ local function createPowerActivationEffect(powerName, color)
         local function createCompactShop(screenGui)
             local shopModal = Instance.new("Frame")
             shopModal.Name = "ShopModal"
-            shopModal.Size = UDim2.new(0, 600, 0, 380)
-            shopModal.Position = UDim2.new(0.5, -300, 0.5, -190)
-            shopModal.BackgroundColor3 = Color3.fromRGB(15, 10, 15)
+            shopModal.Size = UDim2.new(0, 500, 0, 320)
+            shopModal.Position = UDim2.new(0.5, -250, 0.5, -160)
+            shopModal.BackgroundColor3 = Color3.fromRGB(12, 12, 18)
             shopModal.BorderSizePixel = 0
             shopModal.Visible = false
             shopModal.ZIndex = 5000
@@ -317,8 +317,8 @@ local function createPowerActivationEffect(powerName, color)
             end)
             
             local header = Instance.new("Frame")
-            header.Size = UDim2.new(1, 0, 0, 70)
-            header.BackgroundColor3 = Color3.fromRGB(20, 15, 20)
+            header.Size = UDim2.new(1, 0, 0, 60)
+            header.BackgroundColor3 = Color3.fromRGB(18, 15, 22)
             header.BorderSizePixel = 0
             header.ZIndex = 5001
             header.Parent = shopModal
@@ -352,12 +352,12 @@ local function createPowerActivationEffect(powerName, color)
             timerCorner.Parent = timerLabel
             
             local title = Instance.new("TextLabel")
-            title.Size = UDim2.new(0, 400, 1, 0)
-            title.Position = UDim2.new(0, 220, 0, 0)
+            title.Size = UDim2.new(0, 300, 1, 0)
+            title.Position = UDim2.new(0, 180, 0, 0)
             title.BackgroundTransparency = 1
             title.Text = "STRANGER POWERS"
             title.Font = Enum.Font.GothamBlack
-            title.TextSize = 32
+            title.TextSize = 24
             title.TextColor3 = Color3.fromRGB(255, 50, 50)
             title.TextStrokeTransparency = 0
             title.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
@@ -405,9 +405,9 @@ local function createPowerActivationEffect(powerName, color)
             
             local productBox = Instance.new("Frame")
             productBox.Name = "ProductBox"
-            productBox.Size = UDim2.new(1, -40, 0, 240)
-            productBox.Position = UDim2.new(0, 20, 0, 90)
-            productBox.BackgroundColor3 = Color3.fromRGB(25, 20, 25)
+            productBox.Size = UDim2.new(1, -30, 0, 200)
+            productBox.Position = UDim2.new(0, 15, 0, 75)
+            productBox.BackgroundColor3 = Color3.fromRGB(20, 18, 25)
             productBox.BorderSizePixel = 0
             productBox.ZIndex = 5002
             productBox.Parent = shopModal
@@ -423,9 +423,9 @@ local function createPowerActivationEffect(powerName, color)
             boxStroke.Parent = productBox
             
             local iconContainer = Instance.new("Frame")
-            iconContainer.Size = UDim2.new(0, 170, 0, 170)
+            iconContainer.Size = UDim2.new(0, 140, 0, 140)
             iconContainer.Position = UDim2.new(0, 10, 0, 10)
-            iconContainer.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+            iconContainer.BackgroundColor3 = Color3.fromRGB(25, 22, 30)
             iconContainer.BorderSizePixel = 0
             iconContainer.ZIndex = 5003
             iconContainer.Parent = productBox
@@ -450,8 +450,8 @@ local function createPowerActivationEffect(powerName, color)
             powerIcon.Parent = iconContainer
             
             local infoContainer = Instance.new("Frame")
-            infoContainer.Size = UDim2.new(1, -200, 1, -20)
-            infoContainer.Position = UDim2.new(0, 190, 0, 10)
+            infoContainer.Size = UDim2.new(1, -165, 1, -20)
+            infoContainer.Position = UDim2.new(0, 160, 0, 10)
             infoContainer.BackgroundTransparency = 1
             infoContainer.ZIndex = 5003
             infoContainer.Parent = productBox
@@ -531,13 +531,13 @@ local function createPowerActivationEffect(powerName, color)
             
             local descText = Instance.new("TextLabel")
             descText.Name = "DescriptionText"
-            descText.Size = UDim2.new(1, -40, 0, 50)
-            descText.Position = UDim2.new(0, 20, 0, 270)
+            descText.Size = UDim2.new(1, -30, 0, 35)
+            descText.Position = UDim2.new(0, 15, 0, 280)
             descText.BackgroundTransparency = 1
             descText.Text = "Descripción del poder..."
             descText.Font = Enum.Font.Gotham
-            descText.TextSize = 15
-            descText.TextColor3 = Color3.fromRGB(220, 220, 220)
+            descText.TextSize = 13
+            descText.TextColor3 = Color3.fromRGB(200, 200, 200)
             descText.TextWrapped = true
             descText.TextXAlignment = Enum.TextXAlignment.Left
             descText.TextYAlignment = Enum.TextYAlignment.Top
@@ -1116,8 +1116,8 @@ local function createPowerActivationEffect(powerName, color)
                     shopModal.Size = UDim2.new(0, 0, 0, 0)
                     shopModal.Position = UDim2.new(0.5, 0, 0.5, 0)
                     TweenService:Create(shopModal, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-                    Size = UDim2.new(0, 600, 0, 380),
-                    Position = UDim2.new(0.5, -300, 0.5, -190)
+                    Size = UDim2.new(0, 500, 0, 320),
+                    Position = UDim2.new(0.5, -250, 0.5, -160)
                     }):Play()
                 else
                     print("❌ Cerrando tienda...")
