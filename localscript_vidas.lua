@@ -19,17 +19,17 @@ screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.Parent = playerGui
 
--- Contenedor de corazones
+-- Contenedor de corazones (alineado con iconos de Roblox)
 local heartsContainer = Instance.new("Frame")
 heartsContainer.Name = "HeartsContainer"
-heartsContainer.Size = UDim2.new(0, 180, 0, 52)
-heartsContainer.Position = UDim2.new(1, -195, 0, 15)
+heartsContainer.Size = UDim2.new(0, 150, 0, 40)
+heartsContainer.Position = UDim2.new(1, -160, 0, 5) -- Ajustado para alinearse con iconos
 heartsContainer.BackgroundTransparency = 1
 heartsContainer.Parent = screenGui
 
 local hearts = {}
-local HEART_SIZE = 52
-local HEART_SPACING = 8
+local HEART_SIZE = 40 -- Más pequeño
+local HEART_SPACING = 5
 
 for i = 1, 3 do
     local heartButton = Instance.new("ImageButton")
