@@ -250,15 +250,22 @@ for i, pos in ipairs(WALKIE_POSITIONS) do
         
         game:GetService("Debris"):AddItem(explosion, 0.5)
         
-        -- Ocultar walkie para este jugador (efecto visual)
+        -- Hacer desaparecer el walkie-talkie completamente
         for _, part in ipairs(walkie:GetDescendants()) do
             if part:IsA("BasePart") then
-                local clone = part:Clone()
-                clone.Parent = part.Parent
-                TweenService:Create(clone, TweenInfo.new(0.5), {Transparency = 1}):Play()
-                game:GetService("Debris"):AddItem(clone, 0.5)
+                TweenService:Create(part, TweenInfo.new(0.5), {Transparency = 1}):Play()
+            elseif part:IsA("PointLight") then
+                TweenService:Create(part, TweenInfo.new(0.5), {Brightness = 0}):Play()
             end
         end
+        
+        -- Desactivar el prompt
+        prompt.Enabled = false
+        
+        -- Destruir después de la animación
+        task.delay(0.5, function()
+            walkie:Destroy()
+        end)
     end)
 end
 

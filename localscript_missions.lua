@@ -71,11 +71,12 @@ walkieCount.TextColor3 = Color3.fromRGB(255, 255, 255)
 walkieCount.ZIndex = 10001
 walkieCount.Parent = walkieIcon
 
--- ICONO DE MISIONES (arriba de la tienda)
+-- ICONO DE MISIONES (parte derecha de la pantalla, parejo con otros iconos)
 local missionButton = Instance.new("ImageButton")
 missionButton.Name = "MissionButton"
 missionButton.Size = UDim2.new(0, 52, 0, 52)
-missionButton.Position = UDim2.new(0, 15, 0, 95)
+missionButton.Position = UDim2.new(1, -75, 0, 15)
+missionButton.AnchorPoint = Vector2.new(0, 0)
 missionButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
 missionButton.BackgroundTransparency = 0.1
 missionButton.BorderSizePixel = 0
