@@ -291,10 +291,6 @@ local function createPowerActivationEffect(powerName, color)
             shopModal.ZIndex = 5000
             shopModal.Parent = screenGui
             
-            -- STUDS TEXTURE
-            shopModal.Material = Enum.Material.Plastic
-            shopModal.TopSurface = Enum.SurfaceType.Studs
-            
             local modalCorner = Instance.new("UICorner")
             modalCorner.CornerRadius = UDim.new(0, 0)
             modalCorner.Parent = shopModal
@@ -304,6 +300,8 @@ local function createPowerActivationEffect(powerName, color)
             modalStroke.Thickness = 3
             modalStroke.Transparency = 0
             modalStroke.Parent = shopModal
+            
+            print("🛒 Tienda creada correctamente")
             
             task.spawn(function()
                 while true do
@@ -1107,9 +1105,12 @@ local function createPowerActivationEffect(powerName, color)
             end
             
             shopButton.MouseButton1Click:Connect(function()
+                print("🛍️ Botón de tienda clickeado")
                 shopOpen = not shopOpen
+                print("📊 Estado shopOpen:", shopOpen)
                 
                 if shopOpen then
+                    print("✅ Abriendo tienda...")
                     shopModal.Visible = true
                     shopModal.Size = UDim2.new(0, 0, 0, 0)
                     shopModal.Position = UDim2.new(0.5, 0, 0.5, 0)
@@ -1118,6 +1119,7 @@ local function createPowerActivationEffect(powerName, color)
                     Position = UDim2.new(0.5, -350, 0.5, -200)
                     }):Play()
                 else
+                    print("❌ Cerrando tienda...")
                     TweenService:Create(shopModal, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
                     Size = UDim2.new(0, 0, 0, 0),
                     Position = UDim2.new(0.5, 0, 0.5, 0)
