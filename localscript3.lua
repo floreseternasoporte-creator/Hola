@@ -285,23 +285,21 @@ local function createPowerActivationEffect(powerName, color)
             shopModal.Name = "ShopModal"
             shopModal.Size = UDim2.new(0, 700, 0, 400)
             shopModal.Position = UDim2.new(0.5, -350, 0.5, -200)
-            shopModal.BackgroundColor3 = Color3.fromRGB(10, 10, 15)
+            shopModal.BackgroundColor3 = Color3.fromRGB(15, 10, 15)
             shopModal.BorderSizePixel = 0
             shopModal.Visible = false
             shopModal.ZIndex = 5000
             shopModal.Parent = screenGui
             
             local modalCorner = Instance.new("UICorner")
-            modalCorner.CornerRadius = UDim.new(0, 0)
+            modalCorner.CornerRadius = UDim.new(0, 12)
             modalCorner.Parent = shopModal
             
             local modalStroke = Instance.new("UIStroke")
-            modalStroke.Color = Color3.fromRGB(200, 20, 20)
+            modalStroke.Color = Color3.fromRGB(200, 30, 30)
             modalStroke.Thickness = 3
-            modalStroke.Transparency = 0
+            modalStroke.Transparency = 0.2
             modalStroke.Parent = shopModal
-            
-            print("🛒 Tienda creada correctamente")
             
             task.spawn(function()
                 while true do
@@ -318,13 +316,13 @@ local function createPowerActivationEffect(powerName, color)
             
             local header = Instance.new("Frame")
             header.Size = UDim2.new(1, 0, 0, 70)
-            header.BackgroundColor3 = Color3.fromRGB(15, 5, 10)
+            header.BackgroundColor3 = Color3.fromRGB(20, 15, 20)
             header.BorderSizePixel = 0
             header.ZIndex = 5001
             header.Parent = shopModal
             
             local headerCorner = Instance.new("UICorner")
-            headerCorner.CornerRadius = UDim.new(0, 0)
+            headerCorner.CornerRadius = UDim.new(0, 12)
             headerCorner.Parent = header
             
             local headerGradient = Instance.new("UIGradient")
@@ -407,18 +405,19 @@ local function createPowerActivationEffect(powerName, color)
             productBox.Name = "ProductBox"
             productBox.Size = UDim2.new(1, -40, 0, 240)
             productBox.Position = UDim2.new(0, 20, 0, 90)
-            productBox.BackgroundColor3 = Color3.fromRGB(20, 10, 15)
+            productBox.BackgroundColor3 = Color3.fromRGB(25, 20, 25)
             productBox.BorderSizePixel = 0
             productBox.ZIndex = 5002
             productBox.Parent = shopModal
             
             local boxCorner = Instance.new("UICorner")
-            boxCorner.CornerRadius = UDim.new(0, 0)
+            boxCorner.CornerRadius = UDim.new(0, 10)
             boxCorner.Parent = productBox
             
             local boxStroke = Instance.new("UIStroke")
-            boxStroke.Color = Color3.fromRGB(150, 20, 20)
+            boxStroke.Color = Color3.fromRGB(180, 30, 30)
             boxStroke.Thickness = 2
+            boxStroke.Transparency = 0.3
             boxStroke.Parent = productBox
             
             local iconContainer = Instance.new("Frame")
