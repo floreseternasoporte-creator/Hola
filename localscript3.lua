@@ -353,9 +353,9 @@ local function createPowerActivationEffect(powerName, color)
             
             local title = Instance.new("TextLabel")
             title.Size = UDim2.new(0, 300, 1, 0)
-            title.Position = UDim2.new(0, 180, 0, 0)
+            title.Position = UDim2.new(0, 210, 0, 0)
             title.BackgroundTransparency = 1
-            title.Text = "STRANGER POWERS"
+            title.Text = ""
             title.Font = Enum.Font.GothamBlack
             title.TextSize = 24
             title.TextColor3 = Color3.fromRGB(255, 50, 50)
@@ -370,9 +370,9 @@ local function createPowerActivationEffect(powerName, color)
             closeButton.Size = UDim2.new(0, 45, 0, 45)
             closeButton.Position = UDim2.new(1, -55, 0.5, -22.5)
             closeButton.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
-            closeButton.Text = "✕"
+            closeButton.Text = "X"
             closeButton.Font = Enum.Font.GothamBold
-            closeButton.TextSize = 28
+            closeButton.TextSize = 24
             closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
             closeButton.BorderSizePixel = 0
             closeButton.ZIndex = 5003
@@ -1023,7 +1023,7 @@ local function createPowerActivationEffect(powerName, color)
                 return
             end
             
-            local targetRequired = (powerName == "Telekinesis" or powerName == "Explosion" or powerName == "Healing" or powerName == "Lightning")
+            local targetRequired = (powerName == "Telekinesis" or powerName == "Explosion" or powerName == "Healing" or powerName == "Lightning" or powerName == "MindClone")
             if targetRequired and not target then
                 showFeedback("⚠️ APUNTA A UN OBJETIVO", Color3.fromRGB(255, 150, 50))
                 return
@@ -1048,6 +1048,12 @@ local function createPowerActivationEffect(powerName, color)
             elseif powerName == "Lightning" and target and lightningPower then
                 lightningPower:FireServer(target)
                 success = true
+            elseif powerName == "MindClone" and target then
+                local mindClonePower = powerEvents:FindFirstChild("MindClonePower")
+                if mindClonePower then
+                    mindClonePower:FireServer(target)
+                    success = true
+                end
             end
             
             if success then
@@ -1100,7 +1106,7 @@ local function createPowerActivationEffect(powerName, color)
             for _, powerData in ipairs(POWER_DATA) do
                 powerButtons[powerData.Name] = createPowerButton(powerData, screenGui)
                 powerButtons[powerData.Name].Button.MouseButton1Click:Connect(function()
-                    local targetRequired = (powerData.Name == "Telekinesis" or powerData.Name == "Explosion" or powerData.Name == "Healing" or powerData.Name == "Lightning")
+                    local targetRequired = (powerData.Name == "Telekinesis" or powerData.Name == "Explosion" or powerData.Name == "Healing" or powerData.Name == "Lightning" or powerData.Name == "MindClone")
                     handlePowerUse(powerData.Name, targetRequired and getTargetPlayer())
                 end)
             end
