@@ -220,14 +220,14 @@ local function obtenerAreaMapa()
                         part.Transparency = VINE_TRANSPARENCY
                         part.Locked = true
                         
-                        -- >>>>> CAMBIO CRÍTICO: Forzar Studs/Inlets en TODAS las superficies <<<<<
+                        -- >>>>> CAMBIO CRÍTICO: Forzar Studs en TODAS las superficies (igual que el muro) <<<<<
                         -- Esto garantiza que se vea como un ladrillo clásico de Roblox por todos lados.
                         part.TopSurface = Enum.SurfaceType.Studs
-                        part.BottomSurface = Enum.SurfaceType.Inlet 
-                        part.LeftSurface = Enum.SurfaceType.Inlet
-                        part.RightSurface = Enum.SurfaceType.Inlet
-                        part.FrontSurface = Enum.SurfaceType.Inlet
-                        part.BackSurface = Enum.SurfaceType.Inlet
+                        part.BottomSurface = Enum.SurfaceType.Studs 
+                        part.LeftSurface = Enum.SurfaceType.Studs
+                        part.RightSurface = Enum.SurfaceType.Studs
+                        part.FrontSurface = Enum.SurfaceType.Studs
+                        part.BackSurface = Enum.SurfaceType.Studs
                         
                         -- orientar y dar pequeño twist
                         -- La rotación es clave para que los bloques formen la curva de liana

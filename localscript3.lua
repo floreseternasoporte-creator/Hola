@@ -963,6 +963,7 @@ local function createPowerActivationEffect(powerName, color)
                     
                     -- Si no es jugador, verificar si es un NPC/Demogorgon
                     if not targetPlayer and character:FindFirstChild("HumanoidRootPart") then
+                        -- IMPORTANTE: Retornar el modelo completo del NPC
                         return character
                     end
                 end
@@ -983,7 +984,7 @@ local function createPowerActivationEffect(powerName, color)
                     end
                 end
                 
-                -- Buscar NPCs/Demogorgons cercanos
+                -- Buscar NPCs/Demogorgons cercanos en el Workspace
                 for _, model in pairs(workspace:GetChildren()) do
                     if model:IsA("Model") and model:FindFirstChild("Humanoid") and model:FindFirstChild("HumanoidRootPart") then
                         local isPlayerChar = Players:GetPlayerFromCharacter(model)
@@ -991,6 +992,7 @@ local function createPowerActivationEffect(powerName, color)
                             local distance = (playerCharacter.HumanoidRootPart.Position - model.HumanoidRootPart.Position).Magnitude
                             if distance < closestDistance then
                                 closestDistance = distance
+                                -- IMPORTANTE: Retornar el modelo completo del NPC
                                 closestTarget = model
                             end
                         end

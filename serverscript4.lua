@@ -360,15 +360,20 @@ local function useTelekinesis(player, targetPlayer)
     local character = player.Character
     local targetCharacter = targetPlayer.Character or targetPlayer -- Puede ser jugador o NPC
     
-    if not character or not targetCharacter then return end
+    if not character or not targetCharacter then 
+        warn("❌ Telekinesis: character o targetCharacter no encontrado")
+        return 
+    end
     
     -- Verificar si es jugador o NPC
     local isPlayer = targetPlayer:IsA("Player")
     
     if isPlayer then
+        print("⚡ Telekinesis activada en jugador: " .. targetPlayer.Name)
         if not checkAndSetCooldown(player.UserId, "Telekinesis", POWER_CONFIG.Telekinesis.Cooldown) then return end
     else
         -- Para NPCs, verificar cooldown igual
+        print("⚡ Telekinesis activada en NPC: " .. targetCharacter.Name)
         if not checkAndSetCooldown(player.UserId, "Telekinesis", POWER_CONFIG.Telekinesis.Cooldown) then return end
     end
     
@@ -603,14 +608,19 @@ local function useExplosion(player, targetPlayer)
     local character = player.Character
     local targetCharacter = targetPlayer.Character or targetPlayer -- Puede ser jugador o NPC
     
-    if not character or not targetCharacter then return end
+    if not character or not targetCharacter then 
+        warn("❌ Explosion: character o targetCharacter no encontrado")
+        return 
+    end
     
     -- Verificar si es jugador o NPC
     local isPlayer = targetPlayer:IsA("Player")
     
     if isPlayer then
+        print("💥 Explosion activada en jugador: " .. targetPlayer.Name)
         if not checkAndSetCooldown(player.UserId, "Explosion", POWER_CONFIG.Explosion.Cooldown) then return end
     else
+        print("💥 Explosion activada en NPC: " .. targetCharacter.Name)
         if not checkAndSetCooldown(player.UserId, "Explosion", POWER_CONFIG.Explosion.Cooldown) then return end
     end
     
@@ -1567,9 +1577,11 @@ local function useProtection(player)
                 -- Puede ser un jugador o un modelo NPC
                 if targetPlayer:IsA("Player") then
                     useTelekinesis(player, targetPlayer)
-                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") then
-                    -- Es un NPC/Demogorgon
-                    useTelekinesis(player, targetPlayer)
+                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") and targetPlayer:FindFirstChild("HumanoidRootPart") then
+                    -- Es un NPC/Demogorgon - verificar que esté en el workspace
+                    if targetPlayer.Parent == workspace or targetPlayer:IsDescendantOf(workspace) then
+                        useTelekinesis(player, targetPlayer)
+                    end
                 end
             end
         end)
@@ -1578,8 +1590,10 @@ local function useProtection(player)
             if targetPlayer then
                 if targetPlayer:IsA("Player") then
                     useExplosion(player, targetPlayer)
-                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") then
-                    useExplosion(player, targetPlayer)
+                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") and targetPlayer:FindFirstChild("HumanoidRootPart") then
+                    if targetPlayer.Parent == workspace or targetPlayer:IsDescendantOf(workspace) then
+                        useExplosion(player, targetPlayer)
+                    end
                 end
             end
         end)
@@ -1596,8 +1610,10 @@ local function useProtection(player)
             if targetPlayer then
                 if targetPlayer:IsA("Player") then
                     useHealing(player, targetPlayer)
-                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") then
-                    useHealing(player, targetPlayer)
+                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") and targetPlayer:FindFirstChild("HumanoidRootPart") then
+                    if targetPlayer.Parent == workspace or targetPlayer:IsDescendantOf(workspace) then
+                        useHealing(player, targetPlayer)
+                    end
                 end
             end
         end)
@@ -1606,8 +1622,10 @@ local function useProtection(player)
             if targetPlayer then
                 if targetPlayer:IsA("Player") then
                     useLightning(player, targetPlayer)
-                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") then
-                    useLightning(player, targetPlayer)
+                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") and targetPlayer:FindFirstChild("HumanoidRootPart") then
+                    if targetPlayer.Parent == workspace or targetPlayer:IsDescendantOf(workspace) then
+                        useLightning(player, targetPlayer)
+                    end
                 end
             end
         end)
