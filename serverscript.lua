@@ -38,10 +38,13 @@ local function loadPlayerData(player)
         }
     end
     
-    -- BONUS PARA EL CREADOR
+    -- BONUS PARA EL CREADOR Y ADMINISTRADORA
     if player.Name == "Vegetl_t" then
         playerData[userId].Wood = 1000000
         print("👑 CREADOR DETECTADO: " .. player.Name .. " - 1,000,000 madera otorgada")
+    elseif player.Name == "chany_uop" then
+        playerData[userId].Wood = 1000000
+        print("👑 ADMINISTRADORA DETECTADA: " .. player.Name .. " - 1,000,000 madera otorgada")
     end
     
     -- Crear leaderstats

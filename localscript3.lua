@@ -631,7 +631,7 @@ local function createPowerActivationEffect(powerName, color)
                     actionButton.Text = "⏳ NO DISPONIBLE"
                     actionButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
                 else
-                    actionButton.Text = "COMPRAR " .. power.Price .. " MADERA"
+                    actionButton.Text = power.Price .. " 🪵"
                     actionButton.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
                 end
                 

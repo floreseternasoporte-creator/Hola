@@ -35,6 +35,10 @@ healingPower.Parent = powerEvents
 local lightningPower = Instance.new("RemoteEvent")
 lightningPower.Name = "LightningPower"
 lightningPower.Parent = powerEvents
+
+local mindClonePower = Instance.new("RemoteEvent")
+mindClonePower.Name = "MindClonePower"
+mindClonePower.Parent = powerEvents
  
 -- Configuración mejorada
 local POWER_CONFIG = {
@@ -84,6 +88,14 @@ Damage = 60,
 Color = Color3.fromRGB(100, 200, 255),
 ActivationSound = "rbxassetid://130767866",
 ImpactSound = "rbxassetid://2974249481"
+},
+MindClone = {
+Cooldown = 30,
+Duration = 3,
+Range = 50,
+Color = Color3.fromRGB(180, 50, 255),
+ActivationSound = "rbxassetid://126822236629098",
+LoopSound = "rbxassetid://9125516670"
 }
 }
  
@@ -1630,8 +1642,205 @@ local function useProtection(player)
             end
         end)
         
+        -- PODER 7: MINDCLONE
+        local function useMindClone(player, targetPlayer)
+            local character = player.Character
+            local targetCharacter = targetPlayer.Character or targetPlayer
+            
+            if not character or not targetCharacter then 
+                warn("❌ MindClone: character o targetCharacter no encontrado")
+                return 
+            end
+            
+            local isPlayer = targetPlayer:IsA("Player")
+            
+            if isPlayer then
+                print("🧠 MindClone activado en jugador: " .. targetPlayer.Name)
+                if not checkAndSetCooldown(player.UserId, "MindClone", POWER_CONFIG.MindClone.Cooldown) then return end
+            else
+                print("🧠 MindClone activado en NPC: " .. targetCharacter.Name)
+                if not checkAndSetCooldown(player.UserId, "MindClone", POWER_CONFIG.MindClone.Cooldown) then return end
+            end
+            
+            local distance = (character.HumanoidRootPart.Position - targetCharacter.HumanoidRootPart.Position).Magnitude
+            if distance > POWER_CONFIG.MindClone.Range then return end
+            
+            local config = POWER_CONFIG.MindClone
+            
+            local userEffects = createAdvancedParticles(character.Head, config.Color, "mindclone")
+            local noseBleed = createNoseBleed(character)
+            local userLight = createScreenDistortion(character, config.Color)
+            
+            local activationSound, loopSound = createPowerSounds(character.Head, config)
+            
+            local startPos = character.Head.Position
+            local endPos = targetCharacter.Head.Position
+            local segments = 20
+            
+            for i = 1, segments do
+                local progress = i / segments
+                local straightPos = startPos:Lerp(endPos, progress)
+                local randomOffset = Vector3.new(
+                    math.random(-3, 3),
+                    math.random(-3, 3),
+                    math.random(-3, 3)
+                )
+                local segmentPos = straightPos + randomOffset
+                
+                local beam = Instance.new("Part")
+                beam.Size = Vector3.new(0.3, 0.3, 2)
+                beam.Position = segmentPos
+                beam.Anchored = true
+                beam.CanCollide = false
+                beam.Material = Enum.Material.Neon
+                beam.Color = config.Color
+                beam.Transparency = 0.2
+                beam.Parent = workspace
+                
+                TweenService:Create(beam, TweenInfo.new(0.5), {Transparency = 1}):Play()
+                Debris:AddItem(beam, 0.5)
+                
+                task.wait(0.02)
+            end
+            
+            local rope = Instance.new("Part")
+            rope.Size = Vector3.new(0.5, 0.5, (startPos - endPos).Magnitude)
+            rope.CFrame = CFrame.new(startPos, endPos) * CFrame.new(0, 0, -(startPos - endPos).Magnitude/2)
+            rope.Anchored = true
+            rope.CanCollide = false
+            rope.Material = Enum.Material.Neon
+            rope.Color = config.Color
+            rope.Transparency = 0.3
+            rope.Parent = workspace
+            
+            for i = 1, 5 do
+                local particle = Instance.new("ParticleEmitter")
+                particle.Parent = rope
+                particle.Texture = "rbxassetid://6101261905"
+                particle.Color = ColorSequence.new(config.Color)
+                particle.Size = NumberSequence.new(1, 0)
+                particle.Transparency = NumberSequence.new(0, 1)
+                particle.Lifetime = NumberRange.new(0.5, 1)
+                particle.Rate = 100
+                particle.Speed = NumberRange.new(5, 10)
+                particle.SpreadAngle = Vector2.new(180, 180)
+                particle.LightEmission = 1
+            end
+            
+            local targetHumanoid = targetCharacter:FindFirstChild("Humanoid")
+            if targetHumanoid then
+                targetHumanoid.WalkSpeed = 0
+                targetHumanoid.JumpPower = 0
+            end
+            
+            task.wait(config.Duration)
+            
+            local clone = targetCharacter:Clone()
+            clone.Name = targetCharacter.Name .. "_Clone"
+            
+            for _, part in pairs(clone:GetDescendants()) do
+                if part:IsA("BasePart") then
+                    part.Color = config.Color
+                    part.Transparency = 0.3
+                    part.Material = Enum.Material.Neon
+                end
+                if part:IsA("Script") or part:IsA("LocalScript") then
+                    part:Destroy()
+                end
+            end
+            
+            clone.Parent = workspace
+            clone:MoveTo(targetCharacter.HumanoidRootPart.Position + Vector3.new(5, 0, 0))
+            
+            for i = 1, 10 do
+                local orb = Instance.new("Part")
+                orb.Shape = Enum.PartType.Ball
+                orb.Size = Vector3.new(1, 1, 1)
+                orb.Position = clone.HumanoidRootPart.Position + Vector3.new(
+                    math.random(-3, 3),
+                    math.random(-3, 3),
+                    math.random(-3, 3)
+                )
+                orb.Anchored = true
+                orb.CanCollide = false
+                orb.Material = Enum.Material.Neon
+                orb.Color = config.Color
+                orb.Transparency = 0.3
+                orb.Parent = workspace
+                
+                TweenService:Create(orb, TweenInfo.new(1), {Transparency = 1, Size = Vector3.new(0.1, 0.1, 0.1)}):Play()
+                Debris:AddItem(orb, 1)
+            end
+            
+            local cloneHumanoid = clone:FindFirstChild("Humanoid")
+            if cloneHumanoid then
+                cloneHumanoid:MoveTo(targetCharacter.HumanoidRootPart.Position)
+                
+                task.spawn(function()
+                    for i = 1, 10 do
+                        if clone and clone.Parent and targetCharacter and targetCharacter.Parent then
+                            cloneHumanoid:MoveTo(targetCharacter.HumanoidRootPart.Position)
+                            
+                            local dist = (clone.HumanoidRootPart.Position - targetCharacter.HumanoidRootPart.Position).Magnitude
+                            if dist < 5 and targetHumanoid then
+                                targetHumanoid:TakeDamage(10)
+                                
+                                local hit = Instance.new("Part")
+                                hit.Shape = Enum.PartType.Ball
+                                hit.Size = Vector3.new(3, 3, 3)
+                                hit.Position = targetCharacter.HumanoidRootPart.Position
+                                hit.Anchored = true
+                                hit.CanCollide = false
+                                hit.Material = Enum.Material.Neon
+                                hit.Color = config.Color
+                                hit.Transparency = 0.3
+                                hit.Parent = workspace
+                                
+                                TweenService:Create(hit, TweenInfo.new(0.3), {Transparency = 1, Size = Vector3.new(6, 6, 6)}):Play()
+                                Debris:AddItem(hit, 0.3)
+                            end
+                        end
+                        task.wait(0.5)
+                    end
+                    
+                    if clone and clone.Parent then
+                        for _, part in pairs(clone:GetDescendants()) do
+                            if part:IsA("BasePart") then
+                                TweenService:Create(part, TweenInfo.new(1), {Transparency = 1}):Play()
+                            end
+                        end
+                        task.wait(1)
+                        clone:Destroy()
+                    end
+                end)
+            end
+            
+            if targetHumanoid then
+                targetHumanoid.WalkSpeed = 16
+                targetHumanoid.JumpPower = 50
+            end
+            
+            rope:Destroy()
+            if loopSound then loopSound:Stop() task.delay(0.5, function() loopSound:Destroy() end) end
+            task.wait(1)
+            for _, effect in ipairs(userEffects) do effect:Destroy() end
+            if noseBleed then noseBleed:Destroy() end
+            if userLight then userLight:Destroy() end
+        end
+        
+        mindClonePower.OnServerEvent:Connect(function(player, targetPlayer)
+            if targetPlayer then
+                if targetPlayer:IsA("Player") then
+                    useMindClone(player, targetPlayer)
+                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") and targetPlayer:FindFirstChild("HumanoidRootPart") then
+                    if targetPlayer.Parent == workspace or targetPlayer:IsDescendantOf(workspace) then
+                        useMindClone(player, targetPlayer)
+                    end
+                end
+            end
+        end)
+        
         print("✓ STRANGER THINGS EPIC POWERS SYSTEM - ENHANCED VERSION")
         print("✓ Efectos visuales ultra épicos con múltiples capas")
         print("✓ Sistema de sonidos mejorado")
-        print("✓ Poderes: Telekinesis (Q), Explosión (E), Control (R), Protección (T), Curación (F), Rayo (G)")
-        print("✓ Nuevo poder: RAYO AZUL DEVASTADOR")
+        print("✓ Poderes: Telekinesis (Q), Explosión (E), Control (R), Protección (T), Curación (F), Rayo (G), MindClone (H)")
