@@ -1347,13 +1347,13 @@ function DamageSystem:ApplyRagdoll(character, duration)
                     
                     -- ═══ CONFIGURAR ILUMINACIÓN GLOBAL MUY VISIBLE ═══
                     
-                    -- Ambient - MUY BRILLANTE para que se vea todo
-                    Lighting.Ambient = CONFIG.LIGHTING.AMBIENT_LIGHT
-                    Lighting.OutdoorAmbient = CONFIG.LIGHTING.OUTDOOR_AMBIENT
-                    Lighting.Brightness = 1.0                          -- Oscuro
-                    Lighting.ColorShift_Top = Color3.fromRGB(120, 60, 100)    -- Rojo/Púrpura para cielo
-                    Lighting.ColorShift_Bottom = Color3.fromRGB(60, 40, 80)   -- Púrpura oscuro
-                    Lighting.ClockTime = 0                             -- Medianoche (oscuro)
+                    -- Ambient - DÍA CLARO
+                    Lighting.Ambient = Color3.fromRGB(150, 150, 150)
+                    Lighting.OutdoorAmbient = Color3.fromRGB(127, 127, 127)
+                    Lighting.Brightness = 2                            -- DÍA BRILLANTE
+                    Lighting.ColorShift_Top = Color3.fromRGB(0, 0, 0)
+                    Lighting.ColorShift_Bottom = Color3.fromRGB(0, 0, 0)
+                    Lighting.ClockTime = 14                            -- 2 PM (DÍA)
                     Lighting.GeographicLatitude = 0
                     
                     -- Bloom MEGA-intenso para que los rayos rojos resalten
@@ -1380,16 +1380,10 @@ function DamageSystem:ApplyRagdoll(character, duration)
                         cc.Parent = Lighting
                     end
                     
-                    -- Atmosphere MUY LIGERA (apenas visible)
-                    if not Lighting:FindFirstChild("Atmosphere") then
-                        local atmo = Instance.new("Atmosphere")
-                        atmo.Density = 0.4                             -- Niebla visible
-                        atmo.Offset = 0.25                             -- Offset medio
-                        atmo.Color = Color3.fromRGB(100, 80, 110)     -- Púrpura claro
-                        atmo.Decay = Color3.fromRGB(90, 70, 100)      -- Decay púrpura claro
-                        atmo.Glare = 0.8                               -- Mucho resplandor
-                        atmo.Haze = 1.2                                -- Poca niebla
-                        atmo.Parent = Lighting
+                    -- Atmosphere DESACTIVADA para día claro
+                    local atmo = Lighting:FindFirstChild("Atmosphere")
+                    if atmo then
+                        atmo:Destroy()
                     end
                     
                     -- SunRays fuertes (God Rays desde rayos)
@@ -1410,23 +1404,23 @@ function DamageSystem:ApplyRagdoll(character, duration)
                         dof.Parent = Lighting
                     end
                     
-                    -- 🌌 CIELO ROJO/PÚRPURA STRANGER THINGS
-                    if not Lighting:FindFirstChild("UpsideDownSky") then
-                        local sky = Instance.new("Sky")
-                        sky.Name = "UpsideDownSky"
-                        sky.SkyboxBk = "rbxasset://sky/moon.jpg"
-                        sky.SkyboxDn = "rbxasset://sky/moon.jpg"
-                        sky.SkyboxFt = "rbxasset://sky/moon.jpg"
-                        sky.SkyboxLf = "rbxasset://sky/moon.jpg"
-                        sky.SkyboxRt = "rbxasset://sky/moon.jpg"
-                        sky.SkyboxUp = "rbxasset://sky/moon.jpg"
-                        sky.StarCount = 3000
-                        sky.SunAngularSize = 0
-                        sky.MoonAngularSize = 11
-                        sky.MoonTextureId = "rbxasset://sky/moon.jpg"
-                        sky.CelestialBodiesShown = true
-                        sky.Parent = Lighting
+                    -- 🌌 CIELO DE DÍA CLARO
+                    local sky = Lighting:FindFirstChild("UpsideDownSky")
+                    if sky then
+                        sky:Destroy()
                     end
+                    
+                    sky = Instance.new("Sky")
+                    sky.Name = "UpsideDownSky"
+                    sky.SkyboxBk = "rbxasset://sky/sky512_bk.jpg"
+                    sky.SkyboxDn = "rbxasset://sky/sky512_dn.jpg"
+                    sky.SkyboxFt = "rbxasset://sky/sky512_ft.jpg"
+                    sky.SkyboxLf = "rbxasset://sky/sky512_lf.jpg"
+                    sky.SkyboxRt = "rbxasset://sky/sky512_rt.jpg"
+                    sky.SkyboxUp = "rbxasset://sky/sky512_up.jpg"
+                    sky.SunAngularSize = 21
+                    sky.MoonAngularSize = 11
+                    sky.Parent = Lighting
                     
                     -- Film Grain REMOVIDO para look moderno
                     
