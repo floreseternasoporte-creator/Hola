@@ -283,21 +283,25 @@ local function createPowerActivationEffect(powerName, color)
         local function createCompactShop(screenGui)
             local shopModal = Instance.new("Frame")
             shopModal.Name = "ShopModal"
-            shopModal.Size = UDim2.new(0, 620, 0, 340)
-            shopModal.Position = UDim2.new(0.5, -310, 0.5, -170)
-            shopModal.BackgroundColor3 = Color3.fromRGB(25, 25, 35)
+            shopModal.Size = UDim2.new(0, 700, 0, 400)
+            shopModal.Position = UDim2.new(0.5, -350, 0.5, -200)
+            shopModal.BackgroundColor3 = Color3.fromRGB(10, 10, 15)
             shopModal.BorderSizePixel = 0
             shopModal.Visible = false
             shopModal.ZIndex = 5000
             shopModal.Parent = screenGui
             
+            -- STUDS TEXTURE
+            shopModal.Material = Enum.Material.Plastic
+            shopModal.TopSurface = Enum.SurfaceType.Studs
+            
             local modalCorner = Instance.new("UICorner")
-            modalCorner.CornerRadius = UDim.new(0, 16)
+            modalCorner.CornerRadius = UDim.new(0, 0)
             modalCorner.Parent = shopModal
             
             local modalStroke = Instance.new("UIStroke")
-            modalStroke.Color = Color3.fromRGB(138, 43, 226)
-            modalStroke.Thickness = 4
+            modalStroke.Color = Color3.fromRGB(200, 20, 20)
+            modalStroke.Thickness = 3
             modalStroke.Transparency = 0
             modalStroke.Parent = shopModal
             
@@ -315,14 +319,14 @@ local function createPowerActivationEffect(powerName, color)
             end)
             
             local header = Instance.new("Frame")
-            header.Size = UDim2.new(1, 0, 0, 55)
-            header.BackgroundColor3 = Color3.fromRGB(35, 35, 50)
+            header.Size = UDim2.new(1, 0, 0, 70)
+            header.BackgroundColor3 = Color3.fromRGB(15, 5, 10)
             header.BorderSizePixel = 0
             header.ZIndex = 5001
             header.Parent = shopModal
             
             local headerCorner = Instance.new("UICorner")
-            headerCorner.CornerRadius = UDim.new(0, 16)
+            headerCorner.CornerRadius = UDim.new(0, 0)
             headerCorner.Parent = header
             
             local headerGradient = Instance.new("UIGradient")
@@ -350,14 +354,15 @@ local function createPowerActivationEffect(powerName, color)
             timerCorner.Parent = timerLabel
             
             local title = Instance.new("TextLabel")
-            title.Size = UDim2.new(0, 250, 1, 0)
-            title.Position = UDim2.new(0, 210, 0, 0)
+            title.Size = UDim2.new(0, 400, 1, 0)
+            title.Position = UDim2.new(0, 220, 0, 0)
             title.BackgroundTransparency = 1
-            title.Text = "⚡ STRANGER POWERS"
-            title.Font = Enum.Font.GothamBold
-            title.TextSize = 20
-            title.TextColor3 = Color3.fromRGB(255, 255, 255)
-            title.TextStrokeTransparency = 0.3
+            title.Text = "STRANGER POWERS"
+            title.Font = Enum.Font.GothamBlack
+            title.TextSize = 32
+            title.TextColor3 = Color3.fromRGB(255, 50, 50)
+            title.TextStrokeTransparency = 0
+            title.TextStrokeColor3 = Color3.fromRGB(0, 0, 0)
             title.TextXAlignment = Enum.TextXAlignment.Left
             title.ZIndex = 5002
             title.Parent = header
@@ -402,19 +407,19 @@ local function createPowerActivationEffect(powerName, color)
             
             local productBox = Instance.new("Frame")
             productBox.Name = "ProductBox"
-            productBox.Size = UDim2.new(1, -30, 0, 190)
-            productBox.Position = UDim2.new(0, 15, 0, 70)
-            productBox.BackgroundColor3 = Color3.fromRGB(40, 40, 55)
+            productBox.Size = UDim2.new(1, -40, 0, 240)
+            productBox.Position = UDim2.new(0, 20, 0, 90)
+            productBox.BackgroundColor3 = Color3.fromRGB(20, 10, 15)
             productBox.BorderSizePixel = 0
             productBox.ZIndex = 5002
             productBox.Parent = shopModal
             
             local boxCorner = Instance.new("UICorner")
-            boxCorner.CornerRadius = UDim.new(0, 12)
+            boxCorner.CornerRadius = UDim.new(0, 0)
             boxCorner.Parent = productBox
             
             local boxStroke = Instance.new("UIStroke")
-            boxStroke.Color = Color3.fromRGB(80, 80, 100)
+            boxStroke.Color = Color3.fromRGB(150, 20, 20)
             boxStroke.Thickness = 2
             boxStroke.Parent = productBox
             
