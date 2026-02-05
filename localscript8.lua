@@ -18,93 +18,106 @@ screenGui.ResetOnSpawn = false
 screenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 screenGui.Parent = playerGui
  
--- Frame CUADRADO y compacto
-local mainFrame = Instance.new("Frame")
-mainFrame.Name = "WoodFrame"
-mainFrame.Size = UDim2.new(0, 70, 0, 70)  -- CUADRADO
-mainFrame.Position = UDim2.new(0, 15, 0.5, -35)  -- Lado izquierdo
-mainFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)  -- NEGRO
-mainFrame.BackgroundTransparency = 0.5  -- Semi-transparente
+-- BOTÓN CIRCULAR (igual que tienda y mensajes)
+local mainFrame = Instance.new("ImageButton")
+mainFrame.Name = "WoodButton"
+mainFrame.Size = UDim2.new(0, 52, 0, 52)
+mainFrame.Position = UDim2.new(0, 15, 0, 225)
+mainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+mainFrame.BackgroundTransparency = 0.2
 mainFrame.BorderSizePixel = 0
+mainFrame.AutoButtonColor = false
+mainFrame.Image = ""
+mainFrame.ZIndex = 10
 mainFrame.Parent = screenGui
+
+local btnCorner = Instance.new("UICorner")
+btnCorner.CornerRadius = UDim.new(0.5, 0)
+btnCorner.Parent = mainFrame
+
+local btnStroke = Instance.new("UIStroke")
+btnStroke.Color = Color3.fromRGB(100, 100, 100)
+btnStroke.Thickness = 1
+btnStroke.Transparency = 0.3
+btnStroke.Parent = mainFrame
+
+-- ICONO DE MADERA MEJORADO
+local iconContainer = Instance.new("Frame")
+iconContainer.Name = "IconContainer"
+iconContainer.Size = UDim2.new(0, 28, 0, 28)
+iconContainer.Position = UDim2.new(0.5, -14, 0.5, -14)
+iconContainer.BackgroundTransparency = 1
+iconContainer.ZIndex = 11
+iconContainer.Parent = mainFrame
+
+-- Tronco de árbol
+local trunk = Instance.new("Frame")
+trunk.Size = UDim2.new(0, 8, 0, 18)
+trunk.Position = UDim2.new(0.5, -4, 0.5, -3)
+trunk.BackgroundColor3 = Color3.fromRGB(101, 67, 33)
+trunk.BorderSizePixel = 0
+trunk.ZIndex = 12
+trunk.Parent = iconContainer
+
+local trunkCorner = Instance.new("UICorner")
+trunkCorner.CornerRadius = UDim.new(0, 2)
+trunkCorner.Parent = trunk
+
+-- Copa del árbol (3 círculos)
+local function createLeaf(xOffset, yOffset, size)
+    local leaf = Instance.new("Frame")
+    leaf.Size = UDim2.new(0, size, 0, size)
+    leaf.Position = UDim2.new(0.5, xOffset - size/2, 0, yOffset)
+    leaf.BackgroundColor3 = Color3.fromRGB(34, 139, 34)
+    leaf.BorderSizePixel = 0
+    leaf.ZIndex = 12
+    leaf.Parent = iconContainer
+    
+    local leafCorner = Instance.new("UICorner")
+    leafCorner.CornerRadius = UDim.new(1, 0)
+    leafCorner.Parent = leaf
+    
+    return leaf
+end
+
+createLeaf(0, 0, 12)
+createLeaf(-6, 3, 10)
+createLeaf(6, 3, 10)
  
--- Esquinas redondeadas
-local corner = Instance.new("UICorner")
-corner.CornerRadius = UDim.new(0, 8)
-corner.Parent = mainFrame
- 
--- Icono de madera (MEJOR DISEÑO - marrón)
-local iconFrame = Instance.new("Frame")
-iconFrame.Name = "IconFrame"
-iconFrame.Size = UDim2.new(0, 30, 0, 30)
-iconFrame.Position = UDim2.new(0.5, -15, 0, 8)  -- Centrado arriba
-iconFrame.BackgroundColor3 = Color3.fromRGB(160, 82, 45)  -- Marrón claro madera
-iconFrame.BorderSizePixel = 0
-iconFrame.Parent = mainFrame
- 
-local iconCorner = Instance.new("UICorner")
-iconCorner.CornerRadius = UDim.new(0, 3)
-iconCorner.Parent = iconFrame
- 
--- Vetas verticales de madera
-local veta1 = Instance.new("Frame")
-veta1.Size = UDim2.new(0, 2, 1, 0)
-veta1.Position = UDim2.new(0, 8, 0, 0)
-veta1.BackgroundColor3 = Color3.fromRGB(101, 67, 33)
-veta1.BorderSizePixel = 0
-veta1.Parent = iconFrame
- 
-local veta2 = Instance.new("Frame")
-veta2.Size = UDim2.new(0, 2, 1, 0)
-veta2.Position = UDim2.new(0, 14, 0, 0)
-veta2.BackgroundColor3 = Color3.fromRGB(101, 67, 33)
-veta2.BorderSizePixel = 0
-veta2.Parent = iconFrame
- 
-local veta3 = Instance.new("Frame")
-veta3.Size = UDim2.new(0, 2, 1, 0)
-veta3.Position = UDim2.new(0, 20, 0, 0)
-veta3.BackgroundColor3 = Color3.fromRGB(101, 67, 33)
-veta3.BorderSizePixel = 0
-veta3.Parent = iconFrame
- 
--- Anillos del árbol (dos círculos)
-local ring1 = Instance.new("Frame")
-ring1.Name = "Ring1"
-ring1.Size = UDim2.new(0, 10, 0, 10)
-ring1.Position = UDim2.new(0.5, -5, 0.5, -5)
-ring1.BackgroundColor3 = Color3.fromRGB(101, 67, 33)
-ring1.BorderSizePixel = 0
-ring1.Parent = iconFrame
- 
-local ring1Corner = Instance.new("UICorner")
-ring1Corner.CornerRadius = UDim.new(1, 0)
-ring1Corner.Parent = ring1
- 
-local ring2 = Instance.new("Frame")
-ring2.Name = "Ring2"
-ring2.Size = UDim2.new(0, 4, 0, 4)
-ring2.Position = UDim2.new(0.5, -2, 0.5, -2)
-ring2.BackgroundColor3 = Color3.fromRGB(70, 40, 20)
-ring2.BorderSizePixel = 0
-ring2.Parent = iconFrame
- 
-local ring2Corner = Instance.new("UICorner")
-ring2Corner.CornerRadius = UDim.new(1, 0)
-ring2Corner.Parent = ring2
- 
--- Contador de madera (abajo, centrado)
+-- Contador de madera (abajo del botón)
 local woodLabel = Instance.new("TextLabel")
 woodLabel.Name = "WoodCount"
-woodLabel.Size = UDim2.new(1, 0, 0, 25)
-woodLabel.Position = UDim2.new(0, 0, 1, -30)
-woodLabel.BackgroundTransparency = 1
+woodLabel.Size = UDim2.new(0, 52, 0, 18)
+woodLabel.Position = UDim2.new(0, 0, 1, 2)
+woodLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+woodLabel.BackgroundTransparency = 0.3
 woodLabel.Text = "0"
 woodLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-woodLabel.TextSize = 20
+woodLabel.TextSize = 14
 woodLabel.Font = Enum.Font.GothamBold
 woodLabel.TextXAlignment = Enum.TextXAlignment.Center
+woodLabel.BorderSizePixel = 0
+woodLabel.ZIndex = 10
 woodLabel.Parent = mainFrame
+
+local labelCorner = Instance.new("UICorner")
+labelCorner.CornerRadius = UDim.new(0, 4)
+labelCorner.Parent = woodLabel
+
+-- Efectos hover
+mainFrame.MouseEnter:Connect(function()
+    TweenService:Create(mainFrame, TweenInfo.new(0.2), {
+    Size = UDim2.new(0, 56, 0, 56),
+    BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+    }):Play()
+end)
+
+mainFrame.MouseLeave:Connect(function()
+    TweenService:Create(mainFrame, TweenInfo.new(0.2), {
+    Size = UDim2.new(0, 52, 0, 52),
+    BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    }):Play()
+end)
  
 -- Función para actualizar el contador
 local function updateWoodDisplay()
@@ -119,51 +132,32 @@ end
  
 -- Función de animación cuando se añade madera
 local function playAddWoodAnimation(amount)
-    -- Efecto de escala
-    local scaleTween = TweenService:Create(
-    mainFrame,
-    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-    {Size = UDim2.new(0, 75, 0, 75)}
-    )
-    scaleTween:Play()
-    
+    TweenService:Create(mainFrame, TweenInfo.new(0.1), {Size = UDim2.new(0, 56, 0, 56)}):Play()
     task.wait(0.1)
+    TweenService:Create(mainFrame, TweenInfo.new(0.1), {Size = UDim2.new(0, 52, 0, 52)}):Play()
     
-    local scaleBackTween = TweenService:Create(
-    mainFrame,
-    TweenInfo.new(0.1, Enum.EasingStyle.Quad, Enum.EasingDirection.In),
-    {Size = UDim2.new(0, 70, 0, 70)}
-    )
-    scaleBackTween:Play()
-    
-    -- Texto flotante "+3"
     local floatingText = Instance.new("TextLabel")
-    floatingText.Size = UDim2.new(1, 0, 0, 20)
-    floatingText.Position = UDim2.new(0, 0, 0, 20)
+    floatingText.Size = UDim2.new(0, 40, 0, 20)
+    floatingText.Position = UDim2.new(0.5, -20, 0, -10)
     floatingText.BackgroundTransparency = 1
     floatingText.Text = "+" .. amount
     floatingText.TextColor3 = Color3.fromRGB(100, 255, 100)
-    floatingText.TextSize = 18
+    floatingText.TextSize = 16
     floatingText.Font = Enum.Font.GothamBold
-    floatingText.TextXAlignment = Enum.TextXAlignment.Center
+    floatingText.TextStrokeTransparency = 0.5
+    floatingText.ZIndex = 15
     floatingText.Parent = mainFrame
     
-    -- Animar
-    local floatTween = TweenService:Create(
-    floatingText,
-    TweenInfo.new(0.7, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),
-    {
-    Position = UDim2.new(0, 0, 0, -10),
-    TextTransparency = 1
-    }
-    )
-    floatTween:Play()
+    TweenService:Create(floatingText, TweenInfo.new(0.7), {
+    Position = UDim2.new(0.5, -20, 0, -30),
+    TextTransparency = 1,
+    TextStrokeTransparency = 1
+    }):Play()
     
     task.delay(0.7, function()
         floatingText:Destroy()
     end)
     
-    -- Actualizar contador
     updateWoodDisplay()
 end
  

@@ -31,11 +31,11 @@ Color3.fromRGB(95, 25, 50),
 Color3.fromRGB(110, 30, 35),
 }
 
--- Árbol
-local TRUNK_HEIGHT_MIN = 30
-local TRUNK_HEIGHT_MAX = 50
-local TRUNK_BASE_WIDTH_MIN = 5
-local TRUNK_BASE_WIDTH_MAX = 8
+-- Árbol MEJORADO
+local TRUNK_HEIGHT_MIN = 35
+local TRUNK_HEIGHT_MAX = 55
+local TRUNK_BASE_WIDTH_MIN = 6
+local TRUNK_BASE_WIDTH_MAX = 10
 
 -- Sistema de recompensas
 local WOOD_PER_TREE = 3
@@ -311,109 +311,138 @@ local function createTree(position)
     local trunkHeight = randFloat(TRUNK_HEIGHT_MIN, TRUNK_HEIGHT_MAX)
     local baseWidth = randFloat(TRUNK_BASE_WIDTH_MIN, TRUNK_BASE_WIDTH_MAX)
     
-    -- TRONCO PRINCIPAL - MÁS NATURAL
+    -- TRONCO PRINCIPAL MEJORADO - Más grueso y estable
     local trunk = Instance.new("Part")
     trunk.Name = "Trunk"
     trunk.Size = Vector3.new(baseWidth, trunkHeight, baseWidth)
     trunk.Position = position + Vector3.new(0, trunkHeight/2, 0)
     trunk.CFrame = trunk.CFrame * CFrame.Angles(
-    math.rad(randFloat(-3, 3)),
+    math.rad(randFloat(-1, 1)),
     math.rad(randFloat(0, 360)),
-    math.rad(randFloat(-3, 3))
+    0
     )
     applyTerrifyingStyle(trunk, false)
     trunk.CanCollide = true
+    trunk.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5, 100, 1)
     trunk.Parent = treeModel
     
-    -- RAMAS PRINCIPALES - MÁS DENSAS Y NATURALES
-    local numBranches = math.random(18, 28)
+    -- RAMAS PRINCIPALES MEJORADAS - Mejor distribuidas
+    local numBranches = math.random(12, 18)
+    local branchLevels = 4
     
-    for i = 1, numBranches do
-        local heightPercent = randFloat(0.35, 0.95)
-        local branchLength = randFloat(7, 16)
-        local branchThick = randFloat(2, 3.5)
+    for level = 1, branchLevels do
+        local heightPercent = 0.4 + (level / branchLevels) * 0.5
+        local branchesPerLevel = math.floor(numBranches / branchLevels)
         
-        local angleAround = math.rad(randFloat(0, 360))
-        local angleOut = math.rad(randFloat(25, 75))
+        for i = 1, branchesPerLevel do
+            local branchLength = randFloat(8, 14)
+            local branchThick = randFloat(2.5, 4)
+            
+            local angleAround = math.rad((360 / branchesPerLevel) * i + randFloat(-15, 15))
+            local angleOut = math.rad(randFloat(35, 65))
+            
+            local branch = Instance.new("Part")
+            branch.Name = "Branch"
+            branch.Size = Vector3.new(branchThick, branchLength, branchThick)
+            
+            local branchY = (heightPercent - 0.5) * trunkHeight
+            branch.CFrame = CFrame.new(trunk.Position) *
+            CFrame.new(0, branchY, 0) *
+            CFrame.Angles(0, angleAround, 0) *
+            CFrame.Angles(angleOut, 0, 0) *
+            CFrame.new(0, branchLength/2, 0)
+            
+            applyTerrifyingStyle(branch, true)
+            branch.Parent = treeModel
+            
+            local weld = Instance.new("Weld")
+            weld.Part0 = trunk
+            weld.Part1 = branch
+            weld.C0 = trunk.CFrame:Inverse() * branch.CFrame
+            weld.Parent = trunk
         
-        -- Rama principal
-        local branch = Instance.new("Part")
-        branch.Name = "Branch"
-        branch.Size = Vector3.new(branchThick, branchLength, branchThick)
-        
-        branch.CFrame = CFrame.new(trunk.Position) *
-        CFrame.new(0, (heightPercent - 0.5) * trunkHeight, 0) *
-        CFrame.Angles(0, angleAround, 0) *
-        CFrame.Angles(angleOut, 0, 0) *
-        CFrame.Angles(0, 0, math.rad(randFloat(-30, 30))) *
-        CFrame.new(0, branchLength/2, 0)
-        
-        applyTerrifyingStyle(branch, true)
-        branch.Parent = treeModel
-        
-        -- Weld
-        local weld = Instance.new("Weld")
-        weld.Part0 = trunk
-        weld.Part1 = branch
-        weld.C0 = trunk.CFrame:Inverse() * branch.CFrame
-        weld.Parent = trunk
-        
-        -- Sub-ramas para más densidad
-        if math.random() > 0.4 then
-            for j = 1, math.random(1, 3) do
-                local subBranch = Instance.new("Part")
-                subBranch.Name = "SubBranch"
-                local subLength = randFloat(4, 9)
-                local subThick = randFloat(1.2, 2.2)
-                subBranch.Size = Vector3.new(subThick, subLength, subThick)
-                
-                subBranch.CFrame = branch.CFrame *
-                CFrame.new(0, randFloat(-branchLength/2, branchLength/2), 0) *
-                CFrame.Angles(
-                math.rad(randFloat(-60, 60)),
-                math.rad(randFloat(0, 360)),
-                math.rad(randFloat(-60, 60))
-                ) *
-                CFrame.new(0, subLength/2, 0)
-                
-                applyTerrifyingStyle(subBranch, true)
-                subBranch.Parent = treeModel
-                
-                -- Weld al tronco
-                local subWeld = Instance.new("Weld")
-                subWeld.Part0 = trunk
-                subWeld.Part1 = subBranch
-                subWeld.C0 = trunk.CFrame:Inverse() * subBranch.CFrame
-                subWeld.Parent = trunk
+            -- Sub-ramas más pequeñas
+            if math.random() > 0.5 then
+                for j = 1, math.random(1, 2) do
+                    local subBranch = Instance.new("Part")
+                    subBranch.Name = "SubBranch"
+                    local subLength = randFloat(4, 7)
+                    local subThick = randFloat(1.5, 2.5)
+                    subBranch.Size = Vector3.new(subThick, subLength, subThick)
+                    
+                    subBranch.CFrame = branch.CFrame *
+                    CFrame.new(0, branchLength * 0.6, 0) *
+                    CFrame.Angles(
+                    math.rad(randFloat(-45, 45)),
+                    math.rad(randFloat(0, 360)),
+                    0
+                    ) *
+                    CFrame.new(0, subLength/2, 0)
+                    
+                    applyTerrifyingStyle(subBranch, true)
+                    subBranch.Parent = treeModel
+                    
+                    local subWeld = Instance.new("Weld")
+                    subWeld.Part0 = trunk
+                    subWeld.Part1 = subBranch
+                    subWeld.C0 = trunk.CFrame:Inverse() * subBranch.CFrame
+                    subWeld.Parent = trunk
+                end
             end
         end
     end
     
-    -- NUDOS TERRORÍFICOS
-    local numKnots = math.random(6, 12)
+    -- NUDOS TERRORÍFICOS MEJORADOS
+    local numKnots = math.random(4, 8)
     for i = 1, numKnots do
         local knot = Instance.new("Part")
         knot.Name = "Knot"
         knot.Shape = Enum.PartType.Ball
-        local knotSize = randFloat(2.5, 5)
+        local knotSize = randFloat(2, 4)
         knot.Size = Vector3.new(knotSize, knotSize, knotSize)
         
         local knotAngle = math.rad(randFloat(0, 360))
-        local knotHeight = randFloat(0.15, 0.85) * trunkHeight
+        local knotHeight = randFloat(0.2, 0.8) * trunkHeight
         
         knot.CFrame = CFrame.new(trunk.Position) *
         CFrame.new(0, (knotHeight / trunkHeight - 0.5) * trunkHeight, 0) *
         CFrame.Angles(0, knotAngle, 0) *
-        CFrame.new(baseWidth/2 + knotSize/3, 0, 0)
+        CFrame.new(baseWidth/2 + knotSize/4, 0, 0)
         
         applyTerrifyingStyle(knot, true)
         knot.Parent = treeModel
         
-        -- Weld
         local weld = Instance.new("Weld")
         weld.Part0 = trunk
         weld.Part1 = knot
         weld.C0 = trunk.CFrame:Inverse() * knot.CFrame
+        weld.Parent = trunk
+    end
+    
+    -- RAÍCES TERRORÍFICAS
+    local numRoots = math.random(3, 6)
+    for i = 1, numRoots do
+        local root = Instance.new("Part")
+        root.Name = "Root"
+        local rootLength = randFloat(6, 12)
+        local rootThick = randFloat(2, 4)
+        root.Size = Vector3.new(rootThick, rootLength, rootThick)
+        
+        local rootAngle = math.rad((360 / numRoots) * i + randFloat(-20, 20))
+        
+        root.CFrame = CFrame.new(position) *
+        CFrame.new(0, rootLength/3, 0) *
+        CFrame.Angles(0, rootAngle, 0) *
+        CFrame.Angles(math.rad(60), 0, 0) *
+        CFrame.new(0, rootLength/2, 0)
+        
+        applyTerrifyingStyle(root, true)
+        root.Parent = treeModel
+        
+        local weld = Instance.new("Weld")
+        weld.Part0 = trunk
+        weld.Part1 = root
+        weld.C0 = trunk.CFrame:Inverse() * root.CFrame
         weld.Parent = trunk
     end
     
