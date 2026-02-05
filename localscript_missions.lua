@@ -71,11 +71,11 @@ walkieCount.TextColor3 = Color3.fromRGB(255, 255, 255)
 walkieCount.ZIndex = 10001
 walkieCount.Parent = walkieIcon
 
--- ICONO DE MISIONES (DERECHA DE LA PANTALLA)
+-- ICONO DE MISIONES (DERECHA DE LA PANTALLA, ALINEADO CON TIENDA)
 local missionButton = Instance.new("ImageButton")
 missionButton.Name = "MissionButton"
 missionButton.Size = UDim2.new(0, 52, 0, 52)
-missionButton.Position = UDim2.new(1, -67, 0, 15)
+missionButton.Position = UDim2.new(1, -67, 0, 160)
 missionButton.AnchorPoint = Vector2.new(1, 0)
 missionButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
 missionButton.BackgroundTransparency = 0.2
@@ -121,8 +121,8 @@ end)
 -- MODAL DE MISIONES - ESTILO ROBLOX
 local missionModal = Instance.new("Frame")
 missionModal.Name = "MissionModal"
-missionModal.Size = UDim2.new(0, 500, 0, 450)
-missionModal.Position = UDim2.new(0.5, -250, 0.5, -225)
+missionModal.Size = UDim2.new(0, 420, 0, 380)
+missionModal.Position = UDim2.new(0.5, -210, 0.5, -190)
 missionModal.BackgroundColor3 = Color3.fromRGB(25, 27, 29)
 missionModal.BorderSizePixel = 0
 missionModal.Visible = false
@@ -182,7 +182,7 @@ closeBtnCorner.Parent = closeBtn
 
 -- Narración de Will
 local storyBox = Instance.new("Frame")
-storyBox.Size = UDim2.new(1, -40, 0, 90)
+storyBox.Size = UDim2.new(1, -40, 0, 75)
 storyBox.Position = UDim2.new(0, 20, 0, 65)
 storyBox.BackgroundColor3 = Color3.fromRGB(35, 37, 39)
 storyBox.BorderSizePixel = 0
@@ -199,7 +199,7 @@ storyText.Position = UDim2.new(0, 15, 0, 10)
 storyText.BackgroundTransparency = 1
 storyText.Text = "⚠️ WILL BYERS HA DESAPARECIDO\n\nNecesitamos tu ayuda para encontrarlo. Completa las misiones y busca pistas por el mapa."
 storyText.Font = Enum.Font.Gotham
-storyText.TextSize = 13
+storyText.TextSize = 12
 storyText.TextColor3 = Color3.fromRGB(220, 220, 220)
 storyText.TextWrapped = true
 storyText.TextYAlignment = Enum.TextYAlignment.Top
@@ -209,8 +209,8 @@ storyText.Parent = storyBox
 
 -- Lista de misiones
 local missionList = Instance.new("ScrollingFrame")
-missionList.Size = UDim2.new(1, -40, 1, -180)
-missionList.Position = UDim2.new(0, 20, 0, 170)
+missionList.Size = UDim2.new(1, -40, 1, -160)
+missionList.Position = UDim2.new(0, 20, 0, 155)
 missionList.BackgroundTransparency = 1
 missionList.BorderSizePixel = 0
 missionList.ScrollBarThickness = 4
@@ -349,8 +349,8 @@ missionButton.MouseButton1Click:Connect(function()
         missionModal.Size = UDim2.new(0, 0, 0, 0)
         missionModal.Position = UDim2.new(0.5, 0, 0.5, 0)
         TweenService:Create(missionModal, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 500, 0, 450),
-            Position = UDim2.new(0.5, -250, 0.5, -225)
+            Size = UDim2.new(0, 420, 0, 380),
+            Position = UDim2.new(0.5, -210, 0.5, -190)
         }):Play()
         updateMissionList()
     else
@@ -377,6 +377,16 @@ end)
 if walkieTalkieFound then
     walkieTalkieFound.OnClientEvent:Connect(function(count)
         walkieCount.Text = tostring(count)
+        
+        -- Sonido de recogida
+        local pickupSound = Instance.new("Sound")
+        pickupSound.SoundId = "rbxassetid://7039027381"
+        pickupSound.Volume = 0.7
+        pickupSound.Parent = workspace
+        pickupSound:Play()
+        pickupSound.Ended:Connect(function()
+            pickupSound:Destroy()
+        end)
         
         -- Animación
         TweenService:Create(walkieIcon, TweenInfo.new(0.2), {Size = UDim2.new(0, 60, 0, 60)}):Play()
