@@ -50,24 +50,10 @@ MindClone = 30
 }
  
 local cooldowns = {}
-local unlockedPowers = {
-    Telekinesis = true,
-    Explosion = true,
-    Control = true,
-    Protection = true,
-    Healing = true,
-    Lightning = true,
-    MindClone = true
-}
 local powerButtons = {}
 local shopOpen = false
 local selectedPower = nil
 local currentIndex = 1
- 
--- SISTEMA DE ROTACIÓN DE TIENDA
-local SHOP_ROTATION_TIME = 120
-local shopRotationTimer = SHOP_ROTATION_TIME
-local availablePowers = {}
  
 -- ID DEL PRODUCTO HEALING (ROBUX)
 local HEALING_PRODUCT_ID = 3485680292
@@ -89,38 +75,6 @@ local POWER_DATA = {
 -- INICIALIZAR COOLDOWNS
 for _, power in ipairs(POWER_DATA) do
     cooldowns[power.Name] = 0
-end
- 
--- FUNCIÓN PARA ROTAR PODERES DISPONIBLES
-local function rotateShopInventory()
-    availablePowers = {}
-    
-    local allPowers = {}
-    for _, power in ipairs(POWER_DATA) do
-        table.insert(allPowers, power.Name)
-    end
-    
-    local count = math.random(3, 5)
-    for i = #allPowers, 2, -1 do
-        local j = math.random(i)
-        allPowers[i], allPowers[j] = allPowers[j], allPowers[i]
-    end
-    
-    for i = 1, math.min(count, #allPowers) do
-        table.insert(availablePowers, allPowers[i])
-    end
-    
-    print("🔄 Shop rotated! Available powers:", table.concat(availablePowers, ", "))
-    shopRotationTimer = SHOP_ROTATION_TIME
-end
- 
-local function isPowerAvailable(powerName)
-    for _, name in ipairs(availablePowers) do
-        if name == powerName then
-            return true
-        end
-    end
-    return false
 end
  
 local function playPurchaseSound()
@@ -344,21 +298,7 @@ local function createPowerActivationEffect(powerName, color)
             headerGradient.Rotation = 90
             headerGradient.Parent = header
             
-            local timerLabel = Instance.new("TextLabel")
-            timerLabel.Name = "RotationTimer"
-            timerLabel.Size = UDim2.new(0, 180, 0, 30)
-            timerLabel.Position = UDim2.new(0, 20, 0, 12)
-            timerLabel.BackgroundColor3 = Color3.fromRGB(255, 100, 100)
-            timerLabel.Text = "🔄 Renueva en: 2:00"
-            timerLabel.Font = Enum.Font.GothamBold
-            timerLabel.TextSize = 14
-            timerLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-            timerLabel.ZIndex = 5002
-            timerLabel.Parent = header
-            
-            local timerCorner = Instance.new("UICorner")
-            timerCorner.CornerRadius = UDim.new(0, 8)
-            timerCorner.Parent = timerLabel
+
             
             local title = Instance.new("TextLabel")
             title.Size = UDim2.new(0, 300, 1, 0)
@@ -606,8 +546,6 @@ local function createPowerActivationEffect(powerName, color)
                 currentIndex = index
                 selectedPower = power
                 
-                local isAvailable = isPowerAvailable(power.Name)
-                
                 powerIcon.Text = power.Icon
                 powerIcon.TextColor3 = power.Color
                 iconContainer.BackgroundColor3 = Color3.new(
@@ -617,32 +555,15 @@ local function createPowerActivationEffect(powerName, color)
                 )
                 
                 powerName.Text = power.Name:upper()
-                
-                if isAvailable then
-                    stockLabel.Text = "✓ DISPONIBLE"
-                    stockLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
-                else
-                    stockLabel.Text = "✕ NO DISPONIBLE"
-                    stockLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
-                end
-                
-                priceLabel.Text = power.Price .. " MADERA"
-                priceLabel.TextColor3 = Color3.fromRGB(139, 69, 19)
-                
+                stockLabel.Text = "✓ DESBLOQUEADO"
+                stockLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
+                priceLabel.Text = "GRATIS"
+                priceLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
                 rarityBadge.Text = power.Rarity
                 rarityBadge.BackgroundColor3 = power.Color
                 descText.Text = power.Description
-                
-                if unlockedPowers[power.Name] then
-                    actionButton.Text = "✓ DESBLOQUEADO"
-                    actionButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
-                elseif not isAvailable then
-                    actionButton.Text = "⏳ NO DISPONIBLE"
-                    actionButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-                else
-                    actionButton.Text = power.Price .. " 🪵"
-                    actionButton.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
-                end
+                actionButton.Text = "✓ DESBLOQUEADO"
+                actionButton.BackgroundColor3 = Color3.fromRGB(100, 100, 100)
                 
                 productBox.Position = UDim2.new(1, 0, 0, 70)
                 TweenService:Create(productBox, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
@@ -663,51 +584,7 @@ local function createPowerActivationEffect(powerName, color)
             end)
             
             actionButton.MouseButton1Click:Connect(function()
-                if not selectedPower then return end
-                
-                if unlockedPowers[selectedPower.Name] then
-                    showFeedback("⚠️ YA ESTÁ DESBLOQUEADO", Color3.fromRGB(255, 200, 100))
-                    return
-                end
-                
-                if not isPowerAvailable(selectedPower.Name) then
-                    showFeedback("⏳ ESTE PODER NO ESTÁ DISPONIBLE AHORA", Color3.fromRGB(255, 150, 50))
-                    return
-                end
-                
-                -- Verificar madera
-                local leaderstats = player:FindFirstChild("leaderstats")
-                if not leaderstats then return end
-                
-                local woodValue = leaderstats:FindFirstChild("Wood")
-                if not woodValue then return end
-                
-                if woodValue.Value < selectedPower.Price then
-                    showFeedback("❌ NO TIENES SUFICIENTE MADERA (" .. selectedPower.Price .. ")", Color3.fromRGB(255, 100, 100))
-                    return
-                end
-                
-                -- Descontar madera
-                local success = false
-                if purchaseEvent then
-                    success = purchaseEvent:InvokeServer(selectedPower.Name, selectedPower.Price)
-                else
-                    -- Fallback si no existe el evento
-                    if _G.AddWood then
-                        _G.AddWood(player, -selectedPower.Price)
-                        success = true
-                    end
-                end
-                
-                if success then
-                    unlockedPowers[selectedPower.Name] = true
-                    playPurchaseSound()
-                    updateProduct(currentIndex)
-                    updatePowerButtons()
-                    showFeedback("✅ PODER DESBLOQUEADO: " .. selectedPower.Name:upper(), Color3.fromRGB(100, 255, 100))
-                else
-                    showFeedback("❌ ERROR AL COMPRAR", Color3.fromRGB(255, 100, 100))
-                end
+                showFeedback("✅ TODOS LOS PODERES YA ESTÁN DESBLOQUEADOS", Color3.fromRGB(100, 255, 100))
             end)
             
             closeButton.MouseButton1Click:Connect(function()
@@ -722,7 +599,7 @@ local function createPowerActivationEffect(powerName, color)
             
             updateProduct(1)
             
-            return shopModal, timerLabel
+            return shopModal
         end
         
         -- CREAR BOTÓN DE PODER CON VIEWPORTFRAME (PERSONAJE 3D)
@@ -924,15 +801,11 @@ local function createPowerActivationEffect(powerName, color)
             }
         end
         
-        -- ACTUALIZAR BOTONES
+        -- ACTUALIZAR BOTONES (TODOS VISIBLES SIEMPRE)
         function updatePowerButtons()
-            for powerName, isUnlocked in pairs(unlockedPowers) do
-                if isUnlocked and powerButtons[powerName] then
-                    powerButtons[powerName].Container.Visible = true
-                    powerButtons[powerName].Container.Size = UDim2.new(0, 0, 0, 0)
-                    TweenService:Create(powerButtons[powerName].Container, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-                    Size = UDim2.new(0, 70, 0, 90)
-                    }):Play()
+            for powerName, data in pairs(powerButtons) do
+                if data and data.Container then
+                    data.Container.Visible = true
                 end
             end
         end
@@ -1018,13 +891,8 @@ local function createPowerActivationEffect(powerName, color)
             return nil
         end
         
-        -- USAR PODER
+        -- USAR PODER (SIN RESTRICCIONES)
         local function handlePowerUse(powerName, target)
-            if not unlockedPowers[powerName] then
-                showFeedback("🔒 PODER BLOQUEADO - ABRE LA TIENDA", Color3.fromRGB(255, 100, 100))
-                return
-            end
-            
             local now = tick()
             if cooldowns[powerName] > now then
                 local remaining = math.ceil(cooldowns[powerName] - now)
@@ -1081,16 +949,7 @@ local function createPowerActivationEffect(powerName, color)
             end
         end
         
-        -- COMPRA ROBUX
-        MarketplaceService.PromptProductPurchaseFinished:Connect(function(userId, productId, wasPurchased)
-            if userId == player.UserId and productId == HEALING_PRODUCT_ID and wasPurchased then
-                print("✅ Healing Power purchased!")
-                unlockedPowers["Healing"] = true
-                playPurchaseSound()
-                updatePowerButtons()
-                showFeedback("✅ HEALING POWER COMPRADO", Color3.fromRGB(100, 255, 100))
-            end
-        end)
+
         
         -- INICIALIZAR
         local function initialize()
@@ -1103,14 +962,13 @@ local function createPowerActivationEffect(powerName, color)
             screenGui.ResetOnSpawn = false
             screenGui.IgnoreGuiInset = true
             
-            rotateShopInventory()
-            
             local shopButton = createShopIcon(screenGui)
-            local shopModal, timerLabel = createCompactShop(screenGui)
+            local shopModal = createCompactShop(screenGui)
             
-            -- CREAR BOTONES DE PODERES
+            -- CREAR BOTONES DE PODERES (TODOS VISIBLES)
             for _, powerData in ipairs(POWER_DATA) do
                 powerButtons[powerData.Name] = createPowerButton(powerData, screenGui)
+                powerButtons[powerData.Name].Container.Visible = true
                 powerButtons[powerData.Name].Button.MouseButton1Click:Connect(function()
                     local targetRequired = (powerData.Name == "Telekinesis" or powerData.Name == "Explosion" or powerData.Name == "Healing" or powerData.Name == "Lightning" or powerData.Name == "MindClone")
                     handlePowerUse(powerData.Name, targetRequired and getTargetPlayer())
@@ -1144,29 +1002,7 @@ local function createPowerActivationEffect(powerName, color)
             
             UserInputService.InputBegan:Connect(handleKeyboardInput)
             
-            task.spawn(function()
-                while true do
-                    task.wait(1)
-                    shopRotationTimer = shopRotationTimer - 1
-                    
-                    if shopRotationTimer <= 0 then
-                        rotateShopInventory()
-                        showFeedback("🔄 ¡TIENDA RENOVADA!", Color3.fromRGB(255, 200, 50))
-                    end
-                    
-                    local minutes = math.floor(shopRotationTimer / 60)
-                    local seconds = shopRotationTimer % 60
-                    timerLabel.Text = string.format("🔄 Renueva en: %d:%02d", minutes, seconds)
-                    
-                    if shopRotationTimer <= 10 then
-                        timerLabel.BackgroundColor3 = Color3.fromRGB(255, 50, 50)
-                    else
-                        timerLabel.BackgroundColor3 = Color3.fromRGB(100, 100, 255)
-                    end
-                end
-            end)
-            
-            print("✅ Power Shop - Ready!")
+            print("✅ Power Shop - Ready! All powers unlocked!")
         end
         
         initialize()
