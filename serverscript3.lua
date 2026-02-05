@@ -182,9 +182,15 @@ local function setupTreeChopping(treeModel, trunk, groundPosition)
             
             woodEvent:FireClient(player, WOOD_PER_TREE)
             
-            trunk.Anchored = false
-            trunk.CanCollide = true
+            -- Hacer caer TODO el árbol
+            for _, part in pairs(treeModel:GetDescendants()) do
+                if part:IsA("BasePart") and part.Name ~= "PromptPart" then
+                    part.Anchored = false
+                    part.CanCollide = true
+                end
+            end
             
+            -- Impulso al tronco principal
             local fallDirection = Vector3.new(randFloat(-1, 1), 0, randFloat(-1, 1)).Unit
             trunk:ApplyImpulse(fallDirection * 6000 + Vector3.new(0, 2000, 0))
             

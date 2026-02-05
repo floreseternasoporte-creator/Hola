@@ -17,6 +17,12 @@ if not powerEvents then
     warn("❌ PowerEvents not found!")
     return
 end
+
+local purchaseEvent = ReplicatedStorage:WaitForChild("PurchasePowerEvent", 10)
+if not purchaseEvent then
+    warn("❌ PurchasePowerEvent not found!")
+    return
+end
  
 local telekinesisPower = powerEvents:WaitForChild("TelekinesisPower", 5)
 local explosionPower = powerEvents:WaitForChild("ExplosionPower", 5)
@@ -662,16 +668,18 @@ local function createPowerActivationEffect(powerName, color)
                     return
                 end
                 
-                -- Descontar madera
-                if _G.AddWood then
-                    _G.AddWood(player, -selectedPower.Price)
-                end
+                -- Descontar madera en el servidor
+                local success = purchaseEvent:InvokeServer(selectedPower.Name, selectedPower.Price)
                 
-                unlockedPowers[selectedPower.Name] = true
-                playPurchaseSound()
-                updateProduct(currentIndex)
-                updatePowerButtons()
-                showFeedback("✅ PODER DESBLOQUEADO: " .. selectedPower.Name:upper(), Color3.fromRGB(100, 255, 100))
+                if success then
+                    unlockedPowers[selectedPower.Name] = true
+                    playPurchaseSound()
+                    updateProduct(currentIndex)
+                    updatePowerButtons()
+                    showFeedback("✅ PODER DESBLOQUEADO: " .. selectedPower.Name:upper(), Color3.fromRGB(100, 255, 100))
+                else
+                    showFeedback("❌ ERROR AL COMPRAR", Color3.fromRGB(255, 100, 100))
+                end
             end)
             
             closeButton.MouseButton1Click:Connect(function()
