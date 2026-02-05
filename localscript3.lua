@@ -18,11 +18,7 @@ if not powerEvents then
     return
 end
 
-local purchaseEvent = ReplicatedStorage:WaitForChild("PurchasePowerEvent", 10)
-if not purchaseEvent then
-    warn("❌ PurchasePowerEvent not found!")
-    return
-end
+local purchaseEvent = ReplicatedStorage:WaitForChild("PurchasePowerEvent", 5)
  
 local telekinesisPower = powerEvents:WaitForChild("TelekinesisPower", 5)
 local explosionPower = powerEvents:WaitForChild("ExplosionPower", 5)
@@ -668,8 +664,17 @@ local function createPowerActivationEffect(powerName, color)
                     return
                 end
                 
-                -- Descontar madera en el servidor
-                local success = purchaseEvent:InvokeServer(selectedPower.Name, selectedPower.Price)
+                -- Descontar madera
+                local success = false
+                if purchaseEvent then
+                    success = purchaseEvent:InvokeServer(selectedPower.Name, selectedPower.Price)
+                else
+                    -- Fallback si no existe el evento
+                    if _G.AddWood then
+                        _G.AddWood(player, -selectedPower.Price)
+                        success = true
+                    end
+                end
                 
                 if success then
                     unlockedPowers[selectedPower.Name] = true
