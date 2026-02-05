@@ -53,14 +53,14 @@ local HEALING_PRODUCT_ID = 3485680292
 -- SONIDO DE COMPRA
 local PURCHASE_SOUND_ID = "rbxassetid://81946687425639"
  
--- DATOS DE PODERES - POSICIONES MÁS CERCA DEL BOTÓN DE SALTAR
+-- DATOS DE PODERES - CON PRECIOS EN MADERA
 local POWER_DATA = {
-{Name = "Telekinesis", Key = "Q", Color = Color3.fromRGB(138, 43, 226), Rarity = "Legendary", Description = "Levita y controla enemigos con tu mente", Icon = "⚡", Price = 0, IsFree = true, Position = UDim2.new(1, -90, 1, -180)},
-{Name = "Explosion", Key = "E", Color = Color3.fromRGB(255, 20, 20), Rarity = "Epic", Description = "Explosión psíquica devastadora", Icon = "💥", Price = 0, IsFree = true, Position = UDim2.new(1, -20, 1, -230)},
-{Name = "Control", Key = "R", Color = Color3.fromRGB(255, 140, 0), Rarity = "Epic", Description = "Control mental masivo de área", Icon = "🌀", Price = 0, IsFree = true, Position = UDim2.new(1, -160, 1, -180)},
-{Name = "Protection", Key = "T", Color = Color3.fromRGB(255, 10, 10), Rarity = "Rare", Description = "Escudo protector temporal", Icon = "🛡️", Price = 0, IsFree = true, Position = UDim2.new(1, -90, 1, -110)},
-{Name = "Healing", Key = "F", Color = Color3.fromRGB(0, 255, 127), Rarity = "Common", Description = "Curación instantánea (ROBUX)", Icon = "💚", Price = 30, IsFree = false, Position = UDim2.new(1, -20, 1, -160)},
-{Name = "Lightning", Key = "G", Color = Color3.fromRGB(100, 200, 255), Rarity = "Epic", Description = "Rayo devastador azul eléctrico", Icon = "⚡", Price = 0, IsFree = true, Position = UDim2.new(1, -20, 1, -90)}
+{Name = "Telekinesis", Key = "Q", Color = Color3.fromRGB(138, 43, 226), Rarity = "Common", Description = "Levita y controla enemigos con tu mente", Icon = "⚡", Price = 20, Position = UDim2.new(1, -90, 1, -180)},
+{Name = "Explosion", Key = "E", Color = Color3.fromRGB(255, 20, 20), Rarity = "Rare", Description = "Explosión psíquica devastadora", Icon = "💥", Price = 50, Position = UDim2.new(1, -20, 1, -230)},
+{Name = "Control", Key = "R", Color = Color3.fromRGB(255, 140, 0), Rarity = "Epic", Description = "Control mental masivo de área", Icon = "🌀", Price = 100, Position = UDim2.new(1, -160, 1, -180)},
+{Name = "Protection", Key = "T", Color = Color3.fromRGB(255, 10, 10), Rarity = "Legendary", Description = "Escudo protector temporal", Icon = "🛡️", Price = 150, Position = UDim2.new(1, -90, 1, -110)},
+{Name = "Healing", Key = "F", Color = Color3.fromRGB(0, 255, 127), Rarity = "Rare", Description = "Curación instantánea", Icon = "💚", Price = 75, Position = UDim2.new(1, -20, 1, -160)},
+{Name = "Lightning", Key = "G", Color = Color3.fromRGB(100, 200, 255), Rarity = "Epic", Description = "Rayo devastador azul eléctrico", Icon = "⚡", Price = 120, Position = UDim2.new(1, -20, 1, -90)}
 }
  
 -- INICIALIZAR COOLDOWNS
@@ -71,23 +71,20 @@ end
 -- FUNCIÓN PARA ROTAR PODERES DISPONIBLES
 local function rotateShopInventory()
     availablePowers = {}
-    table.insert(availablePowers, "Healing")
     
-    local freePowers = {}
+    local allPowers = {}
     for _, power in ipairs(POWER_DATA) do
-        if power.IsFree then
-            table.insert(freePowers, power.Name)
-        end
+        table.insert(allPowers, power.Name)
     end
     
     local count = math.random(3, 5)
-    for i = #freePowers, 2, -1 do
+    for i = #allPowers, 2, -1 do
         local j = math.random(i)
-        freePowers[i], freePowers[j] = freePowers[j], freePowers[i]
+        allPowers[i], allPowers[j] = allPowers[j], allPowers[i]
     end
     
-    for i = 1, math.min(count, #freePowers) do
-        table.insert(availablePowers, freePowers[i])
+    for i = 1, math.min(count, #allPowers) do
+        table.insert(availablePowers, allPowers[i])
     end
     
     print("🔄 Shop rotated! Available powers:", table.concat(availablePowers, ", "))
@@ -604,13 +601,8 @@ local function createPowerActivationEffect(powerName, color)
                     stockLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
                 end
                 
-                if power.IsFree then
-                    priceLabel.Text = "GRATIS"
-                    priceLabel.TextColor3 = Color3.fromRGB(100, 255, 100)
-                else
-                    priceLabel.Text = power.Price .. " ROBUX"
-                    priceLabel.TextColor3 = Color3.fromRGB(255, 200, 50)
-                end
+                priceLabel.Text = power.Price .. " 🪵 MADERA"
+                priceLabel.TextColor3 = Color3.fromRGB(139, 69, 19)
                 
                 rarityBadge.Text = power.Rarity
                 rarityBadge.BackgroundColor3 = power.Color
@@ -622,12 +614,9 @@ local function createPowerActivationEffect(powerName, color)
                 elseif not isAvailable then
                     actionButton.Text = "⏳ NO DISPONIBLE"
                     actionButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
-                elseif power.IsFree then
-                    actionButton.Text = "🎁 OBTENER GRATIS"
-                    actionButton.BackgroundColor3 = Color3.fromRGB(100, 255, 100)
                 else
-                    actionButton.Text = "💰 COMPRAR " .. power.Price .. " R$"
-                    actionButton.BackgroundColor3 = Color3.fromRGB(255, 200, 50)
+                    actionButton.Text = "💰 COMPRAR " .. power.Price .. " 🪵"
+                    actionButton.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
                 end
                 
                 productBox.Position = UDim2.new(1, 0, 0, 70)
@@ -661,19 +650,28 @@ local function createPowerActivationEffect(powerName, color)
                     return
                 end
                 
-                if selectedPower.Name == "Healing" and not selectedPower.IsFree then
-                    print("💰 Opening Robux purchase...")
-                    pcall(function()
-                        MarketplaceService:PromptProductPurchase(player, HEALING_PRODUCT_ID)
-                    end)
-                else
-                    print("🎁 Unlocking free power:", selectedPower.Name)
-                    unlockedPowers[selectedPower.Name] = true
-                    playPurchaseSound()
-                    updateProduct(currentIndex)
-                    updatePowerButtons()
-                    showFeedback("✅ PODER DESBLOQUEADO: " .. selectedPower.Name:upper(), Color3.fromRGB(100, 255, 100))
+                -- Verificar madera
+                local leaderstats = player:FindFirstChild("leaderstats")
+                if not leaderstats then return end
+                
+                local woodValue = leaderstats:FindFirstChild("Wood")
+                if not woodValue then return end
+                
+                if woodValue.Value < selectedPower.Price then
+                    showFeedback("❌ NO TIENES SUFICIENTE MADERA (" .. selectedPower.Price .. " 🪵)", Color3.fromRGB(255, 100, 100))
+                    return
                 end
+                
+                -- Descontar madera
+                if _G.AddWood then
+                    _G.AddWood(player, -selectedPower.Price)
+                end
+                
+                unlockedPowers[selectedPower.Name] = true
+                playPurchaseSound()
+                updateProduct(currentIndex)
+                updatePowerButtons()
+                showFeedback("✅ PODER DESBLOQUEADO: " .. selectedPower.Name:upper(), Color3.fromRGB(100, 255, 100))
             end)
             
             closeButton.MouseButton1Click:Connect(function()
