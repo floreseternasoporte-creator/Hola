@@ -1351,8 +1351,8 @@ function DamageSystem:ApplyRagdoll(character, duration)
                     Lighting.Ambient = CONFIG.LIGHTING.AMBIENT_LIGHT
                     Lighting.OutdoorAmbient = CONFIG.LIGHTING.OUTDOOR_AMBIENT
                     Lighting.Brightness = 1.0                          -- Oscuro
-                    Lighting.ColorShift_Top = Color3.fromRGB(80, 60, 100)     -- Púrpura oscuro
-                    Lighting.ColorShift_Bottom = Color3.fromRGB(60, 40, 80)   -- Púrpura muy oscuro
+                    Lighting.ColorShift_Top = Color3.fromRGB(120, 60, 100)    -- Rojo/Púrpura para cielo
+                    Lighting.ColorShift_Bottom = Color3.fromRGB(60, 40, 80)   -- Púrpura oscuro
                     Lighting.ClockTime = 0                             -- Medianoche (oscuro)
                     Lighting.GeographicLatitude = 0
                     
@@ -1408,6 +1408,24 @@ function DamageSystem:ApplyRagdoll(character, duration)
                         dof.InFocusRadius = 100
                         dof.NearIntensity = 0.03
                         dof.Parent = Lighting
+                    end
+                    
+                    -- 🌌 CIELO ROJO/PÚRPURA STRANGER THINGS
+                    if not Lighting:FindFirstChild("UpsideDownSky") then
+                        local sky = Instance.new("Sky")
+                        sky.Name = "UpsideDownSky"
+                        sky.SkyboxBk = "rbxasset://sky/moon.jpg"
+                        sky.SkyboxDn = "rbxasset://sky/moon.jpg"
+                        sky.SkyboxFt = "rbxasset://sky/moon.jpg"
+                        sky.SkyboxLf = "rbxasset://sky/moon.jpg"
+                        sky.SkyboxRt = "rbxasset://sky/moon.jpg"
+                        sky.SkyboxUp = "rbxasset://sky/moon.jpg"
+                        sky.StarCount = 3000
+                        sky.SunAngularSize = 0
+                        sky.MoonAngularSize = 11
+                        sky.MoonTextureId = "rbxasset://sky/moon.jpg"
+                        sky.CelestialBodiesShown = true
+                        sky.Parent = Lighting
                     end
                     
                     -- Film Grain REMOVIDO para look moderno
