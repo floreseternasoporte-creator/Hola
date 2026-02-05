@@ -26,7 +26,7 @@ else
     warn("⚠️ PurchasePowerEvent not found, using fallback")
 end
 
-local telekinesisPower, explosionPower, controlPower, protectionPower, healingPower, lightningPower
+local telekinesisPower, explosionPower, controlPower, protectionPower, healingPower, lightningPower, mindClonePower
 
 if powerEvents then
     telekinesisPower = powerEvents:WaitForChild("TelekinesisPower", 3)
@@ -35,6 +35,7 @@ if powerEvents then
     protectionPower = powerEvents:WaitForChild("ProtectionPower", 3)
     healingPower = powerEvents:WaitForChild("HealingPower", 3)
     lightningPower = powerEvents:WaitForChild("LightningPower", 3)
+    mindClonePower = powerEvents:WaitForChild("MindClonePower", 3)
 end
  
 -- CONFIGURACIÓN
@@ -1048,12 +1049,9 @@ local function createPowerActivationEffect(powerName, color)
             elseif powerName == "Lightning" and target and lightningPower then
                 lightningPower:FireServer(target)
                 success = true
-            elseif powerName == "MindClone" and target then
-                local mindClonePower = powerEvents:FindFirstChild("MindClonePower")
-                if mindClonePower then
-                    mindClonePower:FireServer(target)
-                    success = true
-                end
+            elseif powerName == "MindClone" and target and mindClonePower then
+                mindClonePower:FireServer(target)
+                success = true
             end
             
             if success then
