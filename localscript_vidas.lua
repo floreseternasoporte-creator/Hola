@@ -23,7 +23,7 @@ screenGui.Parent = playerGui
 local heartsContainer = Instance.new("Frame")
 heartsContainer.Name = "HeartsContainer"
 heartsContainer.Size = UDim2.new(0, 150, 0, 40)
-heartsContainer.Position = UDim2.new(1, -160, 0, 5) -- Ajustado para alinearse con iconos
+heartsContainer.Position = UDim2.new(1, -160, 0, 2) -- Ajustado para alinearse con iconos
 heartsContainer.BackgroundTransparency = 1
 heartsContainer.Parent = screenGui
 
