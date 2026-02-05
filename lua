@@ -9,8 +9,7 @@
 🎬 CARACTERÍSTICAS ULTRA-ÉPICAS Y 100% VISIBLES:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚡ RAYOS ROJOS FINOS Y BRILLANTES (8 Capas Stranger Things Style)
-☀️  MUNDO SUPER VISIBLE (Brightness 2.5 + ClockTime 6 = Amanecer)
-🎬 FILM GRAIN ACTIVADO (efecto de puntitos/ruido en pantalla como película vieja)
+☀️  MUNDO SUPER VISIBLE Y MODERNO (Brightness 3.0 + ClockTime 14 = Día Brillante)
 💀 SISTEMA DE DAÑO POR PROXIMIDAD (80-100 HP directo, 30-60 cercano)
 🌫️ ESPORAS LUMINOSAS DENSAS (500+ flotando + 150 ascendiendo)
 ✨ ILUMINACIÓN AMBIENTAL MUY BRILLANTE (puedes ver TODO)
@@ -27,7 +26,7 @@
 
 📦 INSTALACIÓN: ServerScriptService
 ✅ 100% VISIBLE: Puedes ver el suelo, paredes, TODO perfectamente
-🎬 FILM GRAIN: Efecto de película vieja con puntitos en la pantalla
+🌟 MODERNO: Sin efectos vintage, gráficos limpios y brillantes
 💀 LETAL: Los rayos causan daño real
 🔴 STRANGER THINGS: Rayos rojos finos como en la serie
 ]]
@@ -1351,10 +1350,10 @@ function DamageSystem:ApplyRagdoll(character, duration)
                     -- Ambient - MUY BRILLANTE para que se vea todo
                     Lighting.Ambient = CONFIG.LIGHTING.AMBIENT_LIGHT
                     Lighting.OutdoorAmbient = CONFIG.LIGHTING.OUTDOOR_AMBIENT
-                    Lighting.Brightness = 2.5                          -- SUPER BRILLANTE
-                    Lighting.ColorShift_Top = Color3.fromRGB(120, 90, 130)     -- Toque púrpura claro
-                    Lighting.ColorShift_Bottom = Color3.fromRGB(100, 70, 110)  -- Púrpura claro
-                    Lighting.ClockTime = 6                             -- Amanecer (visible pero atmosférico)
+                    Lighting.Brightness = 3.0                          -- MUY BRILLANTE (día)
+                    Lighting.ColorShift_Top = Color3.fromRGB(140, 120, 150)   -- Toque púrpura muy claro
+                    Lighting.ColorShift_Bottom = Color3.fromRGB(120, 100, 130) -- Púrpura muy claro
+                    Lighting.ClockTime = 14                            -- Día completo (2 PM - muy visible)
                     Lighting.GeographicLatitude = 0
                     
                     -- Bloom MEGA-intenso para que los rayos rojos resalten
@@ -1411,32 +1410,20 @@ function DamageSystem:ApplyRagdoll(character, duration)
                         dof.Parent = Lighting
                     end
                     
-                    -- 🎬 FILM GRAIN (Efecto de ruido/puntitos en la pantalla)
-                    if not Lighting:FindFirstChild("FilmGrain") then
-                        -- Usamos ColorCorrection con un truco para simular grain
-                        local grain = Instance.new("ColorCorrectionEffect")
-                        grain.Name = "FilmGrain"
-                        grain.Contrast = 0.02
-                        grain.Saturation = 0
-                        grain.TintColor = Color3.fromRGB(240, 240, 240)
-                        grain.Brightness = 0
-                        grain.Parent = Lighting
-                        
-                        warn("🎬 Film Grain Effect activado (efecto de película vieja)")
-                    end
+                    -- Film Grain REMOVIDO para look moderno
                     
                     warn("╔═══════════════════════════════════════════════════════════════════════╗")
-                    warn("║  ⚡ THE UPSIDE DOWN - SUPER VISIBLE + FILM GRAIN EDITION ⚡         ║")
+                    warn("║  ⚡ THE UPSIDE DOWN - MODERN EDITION (STRANGER THINGS) ⚡           ║")
                     warn("║  🔴 RAYOS ROJOS FINOS (8 Capas Stranger Things)                     ║")
                     warn("║  💀 SISTEMA DE DAÑO ACTIVADO (80-100 HP directo)                     ║")
                     warn("║  🌫️  ESPORAS LUMINOSAS (500+ flotando + 150 ascendiendo)            ║")
-                    warn("║  ☀️  MUNDO MUY VISIBLE - Brightness 2.5 + ClockTime 6               ║")
-                    warn("║  🎬 FILM GRAIN ACTIVADO (efecto de puntitos en pantalla)            ║")
+                    warn("║  ☀️  MUNDO MUY VISIBLE - Brightness 3.0 + ClockTime 14 (DÍA)       ║")
+                    warn("║  🌟 GRÁFICOS MODERNOS - Sin efectos vintage                         ║")
                     warn("║  ✨ AMBIENTE BRILLANTE con toques púrpura                           ║")
-                    warn("║  💫 Bloom Ultra + God Rays + Vignette                               ║")
+                    warn("║  💫 Bloom Ultra + God Rays                                          ║")
                     warn("║  🎮 100% JUGABLE Y VISIBLE                                           ║")
                     warn("║  ⚙️  Multi-Servidor ULTRA OPTIMIZADO                                 ║")
-                    warn("║  ✅ ÉPICO, VISIBLE Y CON EFECTO DE PELÍCULA                         ║")
+                    warn("║  ✅ ÉPICO, VISIBLE Y MODERNO                                        ║")
                     warn("╚═══════════════════════════════════════════════════════════════════════╝")
                     
                     while true do
@@ -1523,74 +1510,8 @@ function DamageSystem:ApplyRagdoll(character, duration)
                 -- 🎬 SISTEMA DE FILM GRAIN (EFECTO DE PELÍCULA)
                 -- ═══════════════════════════════════════════════════════════════════════════
                 
-                local FilmGrainSystem = {}
-                
-                function FilmGrainSystem:Init()
-                    -- Crear GUI de Film Grain para cada jugador
-                    Players.PlayerAdded:Connect(function(player)
-                        player.CharacterAdded:Connect(function(character)
-                            task.wait(1)
-                            
-                            local playerGui = player:WaitForChild("PlayerGui")
-                            
-                            -- Crear ScreenGui para el grain
-                            local grainGui = Instance.new("ScreenGui")
-                            grainGui.Name = "FilmGrainEffect"
-                            grainGui.ResetOnSpawn = false
-                            grainGui.IgnoreGuiInset = true
-                            grainGui.DisplayOrder = 100
-                            grainGui.Parent = playerGui
-                            
-                            -- Frame principal con efecto de ruido
-                            local grainFrame = Instance.new("Frame")
-                            grainFrame.Name = "GrainFrame"
-                            grainFrame.Size = UDim2.new(1, 0, 1, 0)
-                            grainFrame.Position = UDim2.new(0, 0, 0, 0)
-                            grainFrame.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-                            grainFrame.BackgroundTransparency = 0.92  -- Muy transparente, solo un toque
-                            grainFrame.BorderSizePixel = 0
-                            grainFrame.Parent = grainGui
-                            
-                            -- Efecto de parpadeo sutil (simula el grain animado)
-                            task.spawn(function()
-                                while grainFrame and grainFrame.Parent do
-                                    -- Variar ligeramente la transparencia para simular ruido
-                                    grainFrame.BackgroundTransparency = rand(0.90, 0.94)
-                                    task.wait(0.05)  -- 20 FPS de actualización
-                                end
-                            end)
-                            
-                            -- Vignette (oscurecer los bordes como en películas)
-                            local vignette = Instance.new("ImageLabel")
-                            vignette.Name = "Vignette"
-                            vignette.Size = UDim2.new(1, 0, 1, 0)
-                            vignette.Position = UDim2.new(0, 0, 0, 0)
-                            vignette.BackgroundTransparency = 1
-                            vignette.Image = "rbxasset://textures/ui/GuiImagePlaceholder.png"
-                            vignette.ImageColor3 = Color3.fromRGB(0, 0, 0)
-                            vignette.ImageTransparency = 0.3
-                            vignette.ScaleType = Enum.ScaleType.Stretch
-                            vignette.Parent = grainGui
-                            
-                            warn("🎬 Film Grain activado para " .. player.Name)
-                        end)
-                    end)
-                    
-                    -- Aplicar a jugadores existentes
-                    for _, player in ipairs(Players:GetPlayers()) do
-                        if player.Character then
-                            task.spawn(function()
-                                FilmGrainSystem:Init()
-                            end)
-                        end
-                    end
-                end
-                
                 -- ═══════════════════════════════════════════════════════════════════════════
                 -- 🚀 INICIAR SISTEMA ÉPICO
                 -- ═══════════════════════════════════════════════════════════════════════════
                 
                 task.spawn(startStorm)
-                task.spawn(function()
-                    FilmGrainSystem:Init()
-                end)
