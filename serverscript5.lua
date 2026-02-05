@@ -233,6 +233,41 @@ local function obtenerAreaMapa()
             post.Parent = parentModel
         end
         
+        -- TECHO TIPO TORRE
+        local roofHeight = 15
+        local roofBase = PLATFORM_SIZE * 0.9
+        local roofTop = 8
+        
+        -- Base del techo (pirámide)
+        for level = 0, 3 do
+            local progress = level / 3
+            local currentSize = roofBase - (roofBase - roofTop) * progress
+            local currentY = topY + PLATFORM_HEIGHT + (level * (roofHeight / 3))
+            
+            local roofPart = Instance.new("Part")
+            roofPart.Name = "RoofLevel" .. level
+            roofPart.Size = Vector3.new(currentSize, roofHeight / 3, currentSize)
+            roofPart.Position = Vector3.new(centerPos.X, currentY, centerPos.Z)
+            roofPart.Material = Enum.Material.Plastic
+            roofPart.Color = Color3.fromRGB(100, 70, 50)
+            roofPart.Anchored = true
+            roofPart.CanCollide = true
+            roofPart.TopSurface = Enum.SurfaceType.Studs
+            roofPart.Parent = parentModel
+        end
+        
+        -- Punta del techo
+        local roofTip = Instance.new("Part")
+        roofTip.Name = "RoofTip"
+        roofTip.Shape = Enum.PartType.Ball
+        roofTip.Size = Vector3.new(4, 4, 4)
+        roofTip.Position = Vector3.new(centerPos.X, topY + PLATFORM_HEIGHT + roofHeight + 2, centerPos.Z)
+        roofTip.Material = Enum.Material.Metal
+        roofTip.Color = Color3.fromRGB(80, 80, 90)
+        roofTip.Anchored = true
+        roofTip.CanCollide = false
+        roofTip.Parent = parentModel
+        
         return northPlatform
     end
     

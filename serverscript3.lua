@@ -1,4 +1,4 @@
--- Script del Servidor para generar árboles terroríficos
+-- Script del Servidor para generar árboles terroríficos MEJORADOS
 -- CON SISTEMA DE MADERA Y RECOMPENSAS
 -- Coloca este script en ServerScriptService.
 
@@ -141,7 +141,6 @@ end
 
 -- ===================== SISTEMA DE DERRIBO =====================
 local function setupTreeChopping(treeModel, trunk, groundPosition)
-    -- Crear parte invisible en el suelo para el ProximityPrompt
     local promptPart = Instance.new("Part")
     promptPart.Name = "PromptPart"
     promptPart.Size = Vector3.new(6, 6, 6)
@@ -162,40 +161,9 @@ local function setupTreeChopping(treeModel, trunk, groundPosition)
     
     local hitCount = 0
     
-    -- Efecto de partículas
-    local function createHitEffect(position)
-        local particles = Instance.new("Part")
-        particles.Size = Vector3.new(1, 1, 1)
-        particles.Position = position
-        particles.Anchored = true
-        particles.CanCollide = false
-        particles.Transparency = 1
-        particles.Parent = Workspace
-        
-        local particleEmitter = Instance.new("ParticleEmitter")
-        particleEmitter.Texture = "rbxasset://textures/particles/smoke_main.dds"
-        particleEmitter.Color = ColorSequence.new(Color3.fromRGB(139, 69, 19))
-        particleEmitter.Size = NumberSequence.new(0.5, 0.1)
-        particleEmitter.Lifetime = NumberRange.new(0.5, 1)
-        particleEmitter.Rate = 50
-        particleEmitter.Speed = NumberRange.new(5, 10)
-        particleEmitter.SpreadAngle = Vector2.new(45, 45)
-        particleEmitter.Parent = particles
-        particleEmitter.Enabled = true
-        
-        task.delay(0.3, function()
-            particleEmitter.Enabled = false
-        end)
-        
-        game:GetService("Debris"):AddItem(particles, 2)
-    end
-    
     proximityPrompt.Triggered:Connect(function(player)
         hitCount = hitCount + 1
         
-        print("🪓 [" .. player.Name .. "] Golpe " .. hitCount .. "/" .. HITS_TO_DESTROY)
-        
-        -- SONIDO DE GOLPE
         local hitSound = Instance.new("Sound")
         hitSound.SoundId = "rbxassetid://6881026094"
         hitSound.Volume = 0.8
@@ -203,99 +171,36 @@ local function setupTreeChopping(treeModel, trunk, groundPosition)
         hitSound:Play()
         game:GetService("Debris"):AddItem(hitSound, 3)
         
-        -- EFECTO VISUAL
-        createHitEffect(groundPosition + Vector3.new(0, 5, 0))
-        
-        -- SHAKE
-        local originalCFrame = trunk.CFrame
-        for i = 1, 3 do
-            if trunk and trunk.Parent then
-                trunk.CFrame = originalCFrame * CFrame.Angles(
-                math.rad(randFloat(-3, 3)),
-                0,
-                math.rad(randFloat(-3, 3))
-                )
-                task.wait(0.05)
-            end
-        end
-        if trunk and trunk.Parent then
-            trunk.CFrame = originalCFrame
-        end
-        
-        -- Actualizar texto
         proximityPrompt.ObjectText = string.format("🌲 %d/%d", hitCount, HITS_TO_DESTROY)
         
-        -- Derribar al tercer golpe
         if hitCount >= HITS_TO_DESTROY then
             proximityPrompt.Enabled = false
             
-            print("🌲 [" .. player.Name .. "] ¡Árbol derribado! +3 madera")
-            
-            -- DAR MADERA AL JUGADOR (usando DataStore)
             if _G.AddWood then
                 _G.AddWood(player, WOOD_PER_TREE)
             end
             
-            -- Notificar al cliente para animación
             woodEvent:FireClient(player, WOOD_PER_TREE)
             
-            -- Destruir TODOS los welds
-            for _, descendant in pairs(treeModel:GetDescendants()) do
-                if descendant:IsA("Weld") or descendant:IsA("WeldConstraint") then
-                    descendant:Destroy()
-                end
-            end
-            
-            task.wait(0.05)
-            
-            -- Re-soldar TODO al tronco
-            for _, part in pairs(treeModel:GetDescendants()) do
-                if part:IsA("BasePart") and part ~= trunk and part ~= promptPart then
-                    local weld = Instance.new("Weld")
-                    weld.Part0 = trunk
-                    weld.Part1 = part
-                    weld.C0 = trunk.CFrame:Inverse() * part.CFrame
-                    weld.Parent = trunk
-                end
-            end
-            
-            task.wait(0.1)
-            
-            -- Física
             trunk.Anchored = false
             trunk.CanCollide = true
             
-            -- Caída
             local fallDirection = Vector3.new(randFloat(-1, 1), 0, randFloat(-1, 1)).Unit
             trunk:ApplyImpulse(fallDirection * 6000 + Vector3.new(0, 2000, 0))
-            trunk:ApplyAngularImpulse(Vector3.new(randFloat(-8000, 8000), 0, randFloat(-8000, 8000)))
             
-            -- Sonido de caída
-            local fallSound = Instance.new("Sound")
-            fallSound.SoundId = "rbxassetid://9125402735"
-            fallSound.Volume = 0.7
-            fallSound.Parent = trunk
-            fallSound:Play()
-            
-            -- DESPAWN
             task.wait(DESPAWN_DELAY)
             
-            print("💨 Despawneando árbol...")
-            
-            -- Fade out
             for _, part in pairs(treeModel:GetDescendants()) do
                 if part:IsA("BasePart") then
                     task.spawn(function()
                         pcall(function()
-                            local tween = TweenService:Create(part, TweenInfo.new(1.5), {Transparency = 1})
-                            tween:Play()
+                            TweenService:Create(part, TweenInfo.new(1.5), {Transparency = 1}):Play()
                         end)
                     end)
                 end
             end
             
             task.wait(2)
-            
             if treeModel and treeModel.Parent then
                 treeModel:Destroy()
             end
@@ -303,7 +208,7 @@ local function setupTreeChopping(treeModel, trunk, groundPosition)
     end)
 end
 
--- ===================== CREACIÓN DE ÁRBOL MEJORADO =====================
+-- ===================== ÁRBOL COMPLETAMENTE REDISEÑADO =====================
 local function createTree(position)
     local treeModel = Instance.new("Model")
     treeModel.Name = "TerrifyingTree"
@@ -311,139 +216,37 @@ local function createTree(position)
     local trunkHeight = randFloat(TRUNK_HEIGHT_MIN, TRUNK_HEIGHT_MAX)
     local baseWidth = randFloat(TRUNK_BASE_WIDTH_MIN, TRUNK_BASE_WIDTH_MAX)
     
-    -- TRONCO PRINCIPAL MEJORADO - Más grueso y estable
+    -- TRONCO VERTICAL
     local trunk = Instance.new("Part")
     trunk.Name = "Trunk"
     trunk.Size = Vector3.new(baseWidth, trunkHeight, baseWidth)
     trunk.Position = position + Vector3.new(0, trunkHeight/2, 0)
-    trunk.CFrame = trunk.CFrame * CFrame.Angles(
-    math.rad(randFloat(-1, 1)),
-    math.rad(randFloat(0, 360)),
-    0
-    )
+    trunk.CFrame = CFrame.new(trunk.Position)
     applyTerrifyingStyle(trunk, false)
     trunk.CanCollide = true
-    trunk.CustomPhysicalProperties = PhysicalProperties.new(0.7, 0.3, 0.5, 100, 1)
+    trunk.Anchored = true
     trunk.Parent = treeModel
     
-    -- RAMAS PRINCIPALES MEJORADAS - Mejor distribuidas
-    local numBranches = math.random(12, 18)
-    local branchLevels = 4
-    
-    for level = 1, branchLevels do
-        local heightPercent = 0.4 + (level / branchLevels) * 0.5
-        local branchesPerLevel = math.floor(numBranches / branchLevels)
-        
-        for i = 1, branchesPerLevel do
-            local branchLength = randFloat(8, 14)
-            local branchThick = randFloat(2.5, 4)
-            
-            local angleAround = math.rad((360 / branchesPerLevel) * i + randFloat(-15, 15))
-            local angleOut = math.rad(randFloat(35, 65))
-            
+    -- RAMAS SIMPLES
+    for level = 1, 3 do
+        local heightPercent = 0.5 + (level * 0.15)
+        for i = 1, 4 do
             local branch = Instance.new("Part")
             branch.Name = "Branch"
-            branch.Size = Vector3.new(branchThick, branchLength, branchThick)
+            branch.Size = Vector3.new(2.5, 8, 2.5)
             
-            local branchY = (heightPercent - 0.5) * trunkHeight
-            branch.CFrame = CFrame.new(trunk.Position) *
-            CFrame.new(0, branchY, 0) *
-            CFrame.Angles(0, angleAround, 0) *
-            CFrame.Angles(angleOut, 0, 0) *
-            CFrame.new(0, branchLength/2, 0)
+            local angle = math.rad((360 / 4) * i)
+            local branchY = position.Y + (trunkHeight * heightPercent)
+            
+            branch.CFrame = CFrame.new(position.X, branchY, position.Z) *
+            CFrame.Angles(0, angle, 0) *
+            CFrame.Angles(math.rad(45), 0, 0) *
+            CFrame.new(0, 4, 0)
             
             applyTerrifyingStyle(branch, true)
+            branch.Anchored = true
             branch.Parent = treeModel
-            
-            local weld = Instance.new("Weld")
-            weld.Part0 = trunk
-            weld.Part1 = branch
-            weld.C0 = trunk.CFrame:Inverse() * branch.CFrame
-            weld.Parent = trunk
-        
-            -- Sub-ramas más pequeñas
-            if math.random() > 0.5 then
-                for j = 1, math.random(1, 2) do
-                    local subBranch = Instance.new("Part")
-                    subBranch.Name = "SubBranch"
-                    local subLength = randFloat(4, 7)
-                    local subThick = randFloat(1.5, 2.5)
-                    subBranch.Size = Vector3.new(subThick, subLength, subThick)
-                    
-                    subBranch.CFrame = branch.CFrame *
-                    CFrame.new(0, branchLength * 0.6, 0) *
-                    CFrame.Angles(
-                    math.rad(randFloat(-45, 45)),
-                    math.rad(randFloat(0, 360)),
-                    0
-                    ) *
-                    CFrame.new(0, subLength/2, 0)
-                    
-                    applyTerrifyingStyle(subBranch, true)
-                    subBranch.Parent = treeModel
-                    
-                    local subWeld = Instance.new("Weld")
-                    subWeld.Part0 = trunk
-                    subWeld.Part1 = subBranch
-                    subWeld.C0 = trunk.CFrame:Inverse() * subBranch.CFrame
-                    subWeld.Parent = trunk
-                end
-            end
         end
-    end
-    
-    -- NUDOS TERRORÍFICOS MEJORADOS
-    local numKnots = math.random(4, 8)
-    for i = 1, numKnots do
-        local knot = Instance.new("Part")
-        knot.Name = "Knot"
-        knot.Shape = Enum.PartType.Ball
-        local knotSize = randFloat(2, 4)
-        knot.Size = Vector3.new(knotSize, knotSize, knotSize)
-        
-        local knotAngle = math.rad(randFloat(0, 360))
-        local knotHeight = randFloat(0.2, 0.8) * trunkHeight
-        
-        knot.CFrame = CFrame.new(trunk.Position) *
-        CFrame.new(0, (knotHeight / trunkHeight - 0.5) * trunkHeight, 0) *
-        CFrame.Angles(0, knotAngle, 0) *
-        CFrame.new(baseWidth/2 + knotSize/4, 0, 0)
-        
-        applyTerrifyingStyle(knot, true)
-        knot.Parent = treeModel
-        
-        local weld = Instance.new("Weld")
-        weld.Part0 = trunk
-        weld.Part1 = knot
-        weld.C0 = trunk.CFrame:Inverse() * knot.CFrame
-        weld.Parent = trunk
-    end
-    
-    -- RAÍCES TERRORÍFICAS
-    local numRoots = math.random(3, 6)
-    for i = 1, numRoots do
-        local root = Instance.new("Part")
-        root.Name = "Root"
-        local rootLength = randFloat(6, 12)
-        local rootThick = randFloat(2, 4)
-        root.Size = Vector3.new(rootThick, rootLength, rootThick)
-        
-        local rootAngle = math.rad((360 / numRoots) * i + randFloat(-20, 20))
-        
-        root.CFrame = CFrame.new(position) *
-        CFrame.new(0, rootLength/3, 0) *
-        CFrame.Angles(0, rootAngle, 0) *
-        CFrame.Angles(math.rad(60), 0, 0) *
-        CFrame.new(0, rootLength/2, 0)
-        
-        applyTerrifyingStyle(root, true)
-        root.Parent = treeModel
-        
-        local weld = Instance.new("Weld")
-        weld.Part0 = trunk
-        weld.Part1 = root
-        weld.C0 = trunk.CFrame:Inverse() * root.CFrame
-        weld.Parent = trunk
     end
     
     setupTreeChopping(treeModel, trunk, position)
@@ -470,8 +273,6 @@ local function generateTrees()
     local minZ = center.Z - size.Z / 2 + MIN_DISTANCE_FROM_EDGE
     local maxZ = center.Z + size.Z / 2 - MIN_DISTANCE_FROM_EDGE
     
-    print("📍 Área: X=" .. minX .. " a " .. maxX .. ", Z=" .. minZ .. " a " .. maxZ)
-    
     local treesCreated = 0
     
     for x = minX, maxX, GRID_SPACING do
@@ -491,13 +292,7 @@ local function generateTrees()
         end
     end
     
-    print("╔════════════════════════════════════╗")
-    print("║  🌲 ÁRBOLES TERRORÍFICOS          ║")
-    print("╠════════════════════════════════════╣")
-    print("║  ✓ Generados: " .. treesCreated .. "               ║")
-    print("║  ✓ Madera por árbol: 3            ║")
-    print("║  ✓ Golpes para derribar: 3        ║")
-    print("╚════════════════════════════════════╝")
+    print("✅ Árboles generados: " .. treesCreated)
 end
 
 generateTrees()
