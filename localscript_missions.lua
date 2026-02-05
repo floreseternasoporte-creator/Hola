@@ -71,14 +71,14 @@ walkieCount.TextColor3 = Color3.fromRGB(255, 255, 255)
 walkieCount.ZIndex = 10001
 walkieCount.Parent = walkieIcon
 
--- ICONO DE MISIONES (parte derecha de la pantalla, parejo con otros iconos)
+-- ICONO DE MISIONES (DERECHA DE LA PANTALLA)
 local missionButton = Instance.new("ImageButton")
 missionButton.Name = "MissionButton"
 missionButton.Size = UDim2.new(0, 52, 0, 52)
-missionButton.Position = UDim2.new(1, -75, 0, 15)
-missionButton.AnchorPoint = Vector2.new(0, 0)
-missionButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-missionButton.BackgroundTransparency = 0.1
+missionButton.Position = UDim2.new(1, -67, 0, 15)
+missionButton.AnchorPoint = Vector2.new(1, 0)
+missionButton.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+missionButton.BackgroundTransparency = 0.2
 missionButton.BorderSizePixel = 0
 missionButton.ZIndex = 10000
 missionButton.Parent = screenGui
@@ -88,8 +88,8 @@ missionCorner.CornerRadius = UDim.new(0.5, 0)
 missionCorner.Parent = missionButton
 
 local missionStroke = Instance.new("UIStroke")
-missionStroke.Color = Color3.fromRGB(255, 200, 50)
-missionStroke.Thickness = 2
+missionStroke.Color = Color3.fromRGB(100, 100, 100)
+missionStroke.Thickness = 1
 missionStroke.Transparency = 0.3
 missionStroke.Parent = missionButton
 
@@ -118,12 +118,12 @@ missionButton.MouseLeave:Connect(function()
     }):Play()
 end)
 
--- MODAL DE MISIONES
+-- MODAL DE MISIONES - ESTILO ROBLOX
 local missionModal = Instance.new("Frame")
 missionModal.Name = "MissionModal"
-missionModal.Size = UDim2.new(0, 450, 0, 400)
-missionModal.Position = UDim2.new(0.5, -225, 0.5, -200)
-missionModal.BackgroundColor3 = Color3.fromRGB(15, 15, 20)
+missionModal.Size = UDim2.new(0, 500, 0, 450)
+missionModal.Position = UDim2.new(0.5, -250, 0.5, -225)
+missionModal.BackgroundColor3 = Color3.fromRGB(25, 27, 29)
 missionModal.BorderSizePixel = 0
 missionModal.Visible = false
 missionModal.ZIndex = 6000
@@ -134,15 +134,15 @@ modalCorner.CornerRadius = UDim.new(0, 12)
 modalCorner.Parent = missionModal
 
 local modalStroke = Instance.new("UIStroke")
-modalStroke.Color = Color3.fromRGB(255, 200, 50)
-modalStroke.Thickness = 3
-modalStroke.Transparency = 0.2
+modalStroke.Color = Color3.fromRGB(0, 0, 0)
+modalStroke.Thickness = 1
+modalStroke.Transparency = 0.5
 modalStroke.Parent = missionModal
 
 -- Header
 local header = Instance.new("Frame")
-header.Size = UDim2.new(1, 0, 0, 60)
-header.BackgroundColor3 = Color3.fromRGB(20, 18, 25)
+header.Size = UDim2.new(1, 0, 0, 50)
+header.BackgroundColor3 = Color3.fromRGB(31, 33, 35)
 header.BorderSizePixel = 0
 header.ZIndex = 6001
 header.Parent = missionModal
@@ -153,67 +153,68 @@ headerCorner.Parent = header
 
 local title = Instance.new("TextLabel")
 title.Size = UDim2.new(1, -60, 1, 0)
-title.Position = UDim2.new(0, 15, 0, 0)
+title.Position = UDim2.new(0, 20, 0, 0)
 title.BackgroundTransparency = 1
-title.Text = "📋 MISIONES"
+title.Text = "Misiones"
 title.Font = Enum.Font.GothamBold
-title.TextSize = 24
-title.TextColor3 = Color3.fromRGB(255, 200, 50)
+title.TextSize = 20
+title.TextColor3 = Color3.fromRGB(255, 255, 255)
 title.TextXAlignment = Enum.TextXAlignment.Left
 title.ZIndex = 6002
 title.Parent = header
 
 -- Botón cerrar
 local closeBtn = Instance.new("TextButton")
-closeBtn.Size = UDim2.new(0, 40, 0, 40)
-closeBtn.Position = UDim2.new(1, -50, 0.5, -20)
+closeBtn.Size = UDim2.new(0, 36, 0, 36)
+closeBtn.Position = UDim2.new(1, -43, 0.5, -18)
 closeBtn.BackgroundColor3 = Color3.fromRGB(220, 50, 50)
 closeBtn.Text = "X"
 closeBtn.Font = Enum.Font.GothamBold
-closeBtn.TextSize = 20
+closeBtn.TextSize = 18
 closeBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
 closeBtn.BorderSizePixel = 0
 closeBtn.ZIndex = 6003
 closeBtn.Parent = header
 
 local closeBtnCorner = Instance.new("UICorner")
-closeBtnCorner.CornerRadius = UDim.new(0.5, 0)
+closeBtnCorner.CornerRadius = UDim.new(0, 4)
 closeBtnCorner.Parent = closeBtn
 
 -- Narración de Will
 local storyBox = Instance.new("Frame")
-storyBox.Size = UDim2.new(1, -30, 0, 80)
-storyBox.Position = UDim2.new(0, 15, 0, 75)
-storyBox.BackgroundColor3 = Color3.fromRGB(25, 22, 30)
+storyBox.Size = UDim2.new(1, -40, 0, 90)
+storyBox.Position = UDim2.new(0, 20, 0, 65)
+storyBox.BackgroundColor3 = Color3.fromRGB(35, 37, 39)
 storyBox.BorderSizePixel = 0
 storyBox.ZIndex = 6001
 storyBox.Parent = missionModal
 
 local storyCorner = Instance.new("UICorner")
-storyCorner.CornerRadius = UDim.new(0, 8)
+storyCorner.CornerRadius = UDim.new(0, 6)
 storyCorner.Parent = storyBox
 
 local storyText = Instance.new("TextLabel")
-storyText.Size = UDim2.new(1, -20, 1, -20)
-storyText.Position = UDim2.new(0, 10, 0, 10)
+storyText.Size = UDim2.new(1, -30, 1, -20)
+storyText.Position = UDim2.new(0, 15, 0, 10)
 storyText.BackgroundTransparency = 1
 storyText.Text = "⚠️ WILL BYERS HA DESAPARECIDO\n\nNecesitamos tu ayuda para encontrarlo. Completa las misiones y busca pistas por el mapa."
 storyText.Font = Enum.Font.Gotham
-storyText.TextSize = 14
-storyText.TextColor3 = Color3.fromRGB(255, 220, 180)
+storyText.TextSize = 13
+storyText.TextColor3 = Color3.fromRGB(220, 220, 220)
 storyText.TextWrapped = true
 storyText.TextYAlignment = Enum.TextYAlignment.Top
+storyText.TextXAlignment = Enum.TextXAlignment.Left
 storyText.ZIndex = 6002
 storyText.Parent = storyBox
 
 -- Lista de misiones
 local missionList = Instance.new("ScrollingFrame")
-missionList.Size = UDim2.new(1, -30, 1, -180)
-missionList.Position = UDim2.new(0, 15, 0, 170)
+missionList.Size = UDim2.new(1, -40, 1, -180)
+missionList.Position = UDim2.new(0, 20, 0, 170)
 missionList.BackgroundTransparency = 1
 missionList.BorderSizePixel = 0
-missionList.ScrollBarThickness = 6
-missionList.ScrollBarImageColor3 = Color3.fromRGB(255, 200, 50)
+missionList.ScrollBarThickness = 4
+missionList.ScrollBarImageColor3 = Color3.fromRGB(120, 120, 120)
 missionList.ZIndex = 6001
 missionList.Parent = missionModal
 
@@ -225,39 +226,41 @@ listLayout.Parent = missionList
 -- Función para crear item de misión
 local function createMissionItem(missionName, description, completed, progress, total)
     local item = Instance.new("Frame")
-    item.Size = UDim2.new(1, -10, 0, 70)
-    item.BackgroundColor3 = completed and Color3.fromRGB(30, 60, 30) or Color3.fromRGB(30, 28, 35)
+    item.Size = UDim2.new(1, -10, 0, 75)
+    item.BackgroundColor3 = Color3.fromRGB(35, 37, 39)
     item.BorderSizePixel = 0
     item.ZIndex = 6002
     item.Parent = missionList
     
     local itemCorner = Instance.new("UICorner")
-    itemCorner.CornerRadius = UDim.new(0, 8)
+    itemCorner.CornerRadius = UDim.new(0, 6)
     itemCorner.Parent = item
     
     local itemStroke = Instance.new("UIStroke")
-    itemStroke.Color = completed and Color3.fromRGB(100, 255, 100) or Color3.fromRGB(100, 100, 120)
-    itemStroke.Thickness = 2
+    itemStroke.Color = completed and Color3.fromRGB(0, 162, 255) or Color3.fromRGB(60, 60, 60)
+    itemStroke.Thickness = 1
     itemStroke.Transparency = 0.5
     itemStroke.Parent = item
     
     -- Icono
     local icon = Instance.new("TextLabel")
-    icon.Size = UDim2.new(0, 50, 1, 0)
+    icon.Size = UDim2.new(0, 45, 1, 0)
     icon.BackgroundTransparency = 1
-    icon.Text = completed and "✅" or "⏳"
-    icon.TextSize = 32
+    icon.Text = completed and "✓" or "○"
+    icon.Font = Enum.Font.GothamBold
+    icon.TextSize = 28
+    icon.TextColor3 = completed and Color3.fromRGB(0, 162, 255) or Color3.fromRGB(150, 150, 150)
     icon.ZIndex = 6003
     icon.Parent = item
     
     -- Nombre
     local nameLabel = Instance.new("TextLabel")
-    nameLabel.Size = UDim2.new(1, -60, 0, 25)
-    nameLabel.Position = UDim2.new(0, 55, 0, 8)
+    nameLabel.Size = UDim2.new(1, -55, 0, 22)
+    nameLabel.Position = UDim2.new(0, 50, 0, 10)
     nameLabel.BackgroundTransparency = 1
     nameLabel.Text = missionName
     nameLabel.Font = Enum.Font.GothamBold
-    nameLabel.TextSize = 16
+    nameLabel.TextSize = 15
     nameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     nameLabel.TextXAlignment = Enum.TextXAlignment.Left
     nameLabel.ZIndex = 6003
@@ -265,13 +268,13 @@ local function createMissionItem(missionName, description, completed, progress, 
     
     -- Descripción
     local descLabel = Instance.new("TextLabel")
-    descLabel.Size = UDim2.new(1, -60, 0, 18)
-    descLabel.Position = UDim2.new(0, 55, 0, 33)
+    descLabel.Size = UDim2.new(1, -55, 0, 16)
+    descLabel.Position = UDim2.new(0, 50, 0, 32)
     descLabel.BackgroundTransparency = 1
     descLabel.Text = description
     descLabel.Font = Enum.Font.Gotham
     descLabel.TextSize = 12
-    descLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+    descLabel.TextColor3 = Color3.fromRGB(180, 180, 180)
     descLabel.TextXAlignment = Enum.TextXAlignment.Left
     descLabel.ZIndex = 6003
     descLabel.Parent = item
@@ -279,13 +282,13 @@ local function createMissionItem(missionName, description, completed, progress, 
     -- Progreso
     if total then
         local progressLabel = Instance.new("TextLabel")
-        progressLabel.Size = UDim2.new(1, -60, 0, 15)
-        progressLabel.Position = UDim2.new(0, 55, 1, -20)
+        progressLabel.Size = UDim2.new(1, -55, 0, 16)
+        progressLabel.Position = UDim2.new(0, 50, 1, -24)
         progressLabel.BackgroundTransparency = 1
-        progressLabel.Text = "Progreso: " .. progress .. "/" .. total
+        progressLabel.Text = progress .. "/" .. total
         progressLabel.Font = Enum.Font.GothamBold
         progressLabel.TextSize = 13
-        progressLabel.TextColor3 = completed and Color3.fromRGB(100, 255, 100) or Color3.fromRGB(255, 200, 50)
+        progressLabel.TextColor3 = completed and Color3.fromRGB(0, 162, 255) or Color3.fromRGB(200, 200, 200)
         progressLabel.TextXAlignment = Enum.TextXAlignment.Left
         progressLabel.ZIndex = 6003
         progressLabel.Parent = item
@@ -346,8 +349,8 @@ missionButton.MouseButton1Click:Connect(function()
         missionModal.Size = UDim2.new(0, 0, 0, 0)
         missionModal.Position = UDim2.new(0.5, 0, 0.5, 0)
         TweenService:Create(missionModal, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-            Size = UDim2.new(0, 450, 0, 400),
-            Position = UDim2.new(0.5, -225, 0.5, -200)
+            Size = UDim2.new(0, 500, 0, 450),
+            Position = UDim2.new(0.5, -250, 0.5, -225)
         }):Play()
         updateMissionList()
     else
