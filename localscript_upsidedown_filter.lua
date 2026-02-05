@@ -27,13 +27,13 @@ local function setupLighting()
     sky.MoonAngularSize = 0
     sky.Parent = Lighting
     
-    -- Color Correction (tono rojo)
+    -- Color Correction (tono rojo SUAVE)
     local colorCorrection = Instance.new("ColorCorrectionEffect")
     colorCorrection.Name = "UpsideDownColor"
-    colorCorrection.Brightness = 0.1
-    colorCorrection.Contrast = 0.25
-    colorCorrection.Saturation = -0.2
-    colorCorrection.TintColor = Color3.fromRGB(255, 150, 150)
+    colorCorrection.Brightness = 0.2
+    colorCorrection.Contrast = 0.1
+    colorCorrection.Saturation = -0.1
+    colorCorrection.TintColor = Color3.fromRGB(255, 200, 200)
     colorCorrection.Parent = Lighting
     
     -- Bloom (resplandor)
@@ -44,14 +44,14 @@ local function setupLighting()
     bloom.Threshold = 0.7
     bloom.Parent = Lighting
     
-    -- Atmosphere (niebla roja)
+    -- Atmosphere (niebla roja LIGERA)
     local atmosphere = Instance.new("Atmosphere")
     atmosphere.Name = "UpsideDownAtmosphere"
-    atmosphere.Density = 0.4
-    atmosphere.Offset = 0.25
-    atmosphere.Color = Color3.fromRGB(200, 100, 100)
-    atmosphere.Glare = 0.5
-    atmosphere.Haze = 2.5
+    atmosphere.Density = 0.2
+    atmosphere.Offset = 0.1
+    atmosphere.Color = Color3.fromRGB(255, 180, 180)
+    atmosphere.Glare = 0.4
+    atmosphere.Haze = 1
     atmosphere.Parent = Lighting
     
     -- SunRays (rayos rojos)
@@ -61,16 +61,16 @@ local function setupLighting()
     sunRays.Spread = 1
     sunRays.Parent = Lighting
     
-    -- Ajustar iluminación global
-    Lighting.Ambient = Color3.fromRGB(200, 120, 120)
-    Lighting.OutdoorAmbient = Color3.fromRGB(220, 140, 140)
-    Lighting.Brightness = 3
-    Lighting.ClockTime = 18
-    Lighting.FogColor = Color3.fromRGB(150, 80, 80)
-    Lighting.FogEnd = 1000
-    Lighting.FogStart = 150
-    Lighting.EnvironmentDiffuseScale = 0.5
-    Lighting.EnvironmentSpecularScale = 0.5
+    -- Ajustar iluminación global (MUY BRILLANTE)
+    Lighting.Ambient = Color3.fromRGB(255, 200, 200)
+    Lighting.OutdoorAmbient = Color3.fromRGB(255, 200, 200)
+    Lighting.Brightness = 5
+    Lighting.ClockTime = 14
+    Lighting.FogColor = Color3.fromRGB(200, 120, 120)
+    Lighting.FogEnd = 2000
+    Lighting.FogStart = 500
+    Lighting.EnvironmentDiffuseScale = 1
+    Lighting.EnvironmentSpecularScale = 1
     
     print("✅ Lighting configurado")
 end
@@ -84,38 +84,7 @@ local function createUpsideDownGUI()
     screenGui.DisplayOrder = 1
     screenGui.Parent = playerGui
     
-    -- VIGNETTE OSCURO
-    local vignette = Instance.new("ImageLabel")
-    vignette.Name = "Vignette"
-    vignette.Size = UDim2.new(1, 0, 1, 0)
-    vignette.BackgroundTransparency = 1
-    vignette.Image = "rbxasset://textures/ui/VignetteMask.png"
-    vignette.ImageColor3 = Color3.fromRGB(60, 30, 30)
-    vignette.ImageTransparency = 0.2
-    vignette.ZIndex = 1
-    vignette.Parent = screenGui
-    
-    -- OVERLAY ROJO OSCURO
-    local overlay = Instance.new("Frame")
-    overlay.Name = "RedOverlay"
-    overlay.Size = UDim2.new(1, 0, 1, 0)
-    overlay.BackgroundColor3 = Color3.fromRGB(100, 40, 40)
-    overlay.BackgroundTransparency = 0.85
-    overlay.BorderSizePixel = 0
-    overlay.ZIndex = 2
-    overlay.Parent = screenGui
-    
-    -- GRADIENTE VERTICAL
-    local gradient = Instance.new("UIGradient")
-    gradient.Color = ColorSequence.new{
-        ColorSequenceKeypoint.new(0, Color3.fromRGB(80, 30, 30)),
-        ColorSequenceKeypoint.new(0.5, Color3.fromRGB(100, 50, 50)),
-        ColorSequenceKeypoint.new(1, Color3.fromRGB(60, 20, 20))
-    }
-    gradient.Rotation = 90
-    gradient.Parent = overlay
-    
-    -- CONTENEDOR DE ESPORAS
+    -- CONTENEDOR DE ESPORAS (SIN VIGNETTE NI OVERLAY OSCURO)
     local sporesContainer = Instance.new("Frame")
     sporesContainer.Name = "SporesContainer"
     sporesContainer.Size = UDim2.new(1, 0, 1, 0)
@@ -251,34 +220,6 @@ local function createUpsideDownGUI()
             end
         end)
     end
-    
-    -- EFECTO DE PULSO EN OVERLAY
-    task.spawn(function()
-        while overlay and overlay.Parent do
-            TweenService:Create(overlay, TweenInfo.new(3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-                BackgroundTransparency = 0.8
-            }):Play()
-            task.wait(3)
-            TweenService:Create(overlay, TweenInfo.new(3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-                BackgroundTransparency = 0.9
-            }):Play()
-            task.wait(3)
-        end
-    end)
-    
-    -- EFECTO DE PULSO EN VIGNETTE
-    task.spawn(function()
-        while vignette and vignette.Parent do
-            TweenService:Create(vignette, TweenInfo.new(4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-                ImageTransparency = 0.1
-            }):Play()
-            task.wait(4)
-            TweenService:Create(vignette, TweenInfo.new(4, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut), {
-                ImageTransparency = 0.3
-            }):Play()
-            task.wait(4)
-        end
-    end)
     
     print("✅ GUI del Upside Down creado")
 end
