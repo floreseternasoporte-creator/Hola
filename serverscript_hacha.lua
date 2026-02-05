@@ -6,7 +6,7 @@ local TweenService = game:GetService("TweenService")
 local Debris = game:GetService("Debris")
 
 -- Esperar evento
-local cutEvent = ReplicatedStorage:WaitForChild("CutViineEvent")
+local cutEvent = ReplicatedStorage:WaitForChild("CutVineEvent")
 
 -- Sonido de corte
 local CUT_SOUND_ID = "rbxassetid://6881026094"
