@@ -9,7 +9,7 @@
 🎬 CARACTERÍSTICAS ULTRA-ÉPICAS Y 100% VISIBLES:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚡ RAYOS ROJOS FINOS Y BRILLANTES (8 Capas Stranger Things Style)
-☀️  MUNDO SUPER VISIBLE Y MODERNO (Brightness 3.0 + ClockTime 14 = Día Brillante)
+☀️  MUNDO EQUILIBRADO (Brightness 2.0 + ClockTime 10 = Tarde atmosférica)
 💀 SISTEMA DE DAÑO POR PROXIMIDAD (80-100 HP directo, 30-60 cercano)
 🌫️ ESPORAS LUMINOSAS DENSAS (500+ flotando + 150 ascendiendo)
 ✨ ILUMINACIÓN AMBIENTAL MUY BRILLANTE (puedes ver TODO)
@@ -191,8 +191,8 @@ MEGA_BRIGHTNESS = 240,
 SKY_FLASH = 0.9,
 BLOOM_INTENSITY = 5.5,
 BLOOM_SIZE = 120,
-AMBIENT_LIGHT = Color3.fromRGB(80, 65, 85),      -- MUCHO más brillante con toque púrpura
-OUTDOOR_AMBIENT = Color3.fromRGB(90, 70, 95),    -- MUCHO más brillante
+AMBIENT_LIGHT = Color3.fromRGB(60, 50, 70),      -- Equilibrado con toque púrpura
+OUTDOOR_AMBIENT = Color3.fromRGB(70, 55, 80),    -- Equilibrado
 GOD_RAYS_INTENSITY = 0.35,
 },
  
@@ -201,7 +201,7 @@ COLOR = {
 TINT = Color3.fromRGB(200, 180, 220),    -- Tinte más claro
 SATURATION = -0.05,                       -- Casi normal
 CONTRAST = 0.15,                          -- Menos contraste
-BRIGHTNESS = 0.25,                        -- MUY BRILLANTE
+BRIGHTNESS = 0.15,                        -- Equilibrado
 },
  
 -- 🌍 ÁREA
@@ -1350,10 +1350,10 @@ function DamageSystem:ApplyRagdoll(character, duration)
                     -- Ambient - MUY BRILLANTE para que se vea todo
                     Lighting.Ambient = CONFIG.LIGHTING.AMBIENT_LIGHT
                     Lighting.OutdoorAmbient = CONFIG.LIGHTING.OUTDOOR_AMBIENT
-                    Lighting.Brightness = 3.0                          -- MUY BRILLANTE (día)
-                    Lighting.ColorShift_Top = Color3.fromRGB(140, 120, 150)   -- Toque púrpura muy claro
-                    Lighting.ColorShift_Bottom = Color3.fromRGB(120, 100, 130) -- Púrpura muy claro
-                    Lighting.ClockTime = 14                            -- Día completo (2 PM - muy visible)
+                    Lighting.Brightness = 2.0                          -- Equilibrado
+                    Lighting.ColorShift_Top = Color3.fromRGB(110, 90, 120)    -- Púrpura sutil
+                    Lighting.ColorShift_Bottom = Color3.fromRGB(90, 70, 100)  -- Púrpura sutil
+                    Lighting.ClockTime = 10                            -- Tarde (10 AM - equilibrado)
                     Lighting.GeographicLatitude = 0
                     
                     -- Bloom MEGA-intenso para que los rayos rojos resalten
@@ -1417,7 +1417,7 @@ function DamageSystem:ApplyRagdoll(character, duration)
                     warn("║  🔴 RAYOS ROJOS FINOS (8 Capas Stranger Things)                     ║")
                     warn("║  💀 SISTEMA DE DAÑO ACTIVADO (80-100 HP directo)                     ║")
                     warn("║  🌫️  ESPORAS LUMINOSAS (500+ flotando + 150 ascendiendo)            ║")
-                    warn("║  ☀️  MUNDO MUY VISIBLE - Brightness 3.0 + ClockTime 14 (DÍA)       ║")
+                    warn("║  ☀️  MUNDO EQUILIBRADO - Brightness 2.0 + ClockTime 10 (TARDE)      ║")
                     warn("║  🌟 GRÁFICOS MODERNOS - Sin efectos vintage                         ║")
                     warn("║  ✨ AMBIENTE BRILLANTE con toques púrpura                           ║")
                     warn("║  💫 Bloom Ultra + God Rays                                          ║")
