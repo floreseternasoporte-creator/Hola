@@ -31,11 +31,11 @@ Color3.fromRGB(95, 25, 50),
 Color3.fromRGB(110, 30, 35),
 }
 
--- Árbol MEJORADO
-local TRUNK_HEIGHT_MIN = 35
-local TRUNK_HEIGHT_MAX = 55
-local TRUNK_BASE_WIDTH_MIN = 6
-local TRUNK_BASE_WIDTH_MAX = 10
+-- Árbol REDISEÑADO
+local TRUNK_HEIGHT_MIN = 20
+local TRUNK_HEIGHT_MAX = 30
+local TRUNK_BASE_WIDTH_MIN = 3
+local TRUNK_BASE_WIDTH_MAX = 5
 
 -- Sistema de recompensas
 local WOOD_PER_TREE = 3
@@ -208,7 +208,7 @@ local function setupTreeChopping(treeModel, trunk, groundPosition)
     end)
 end
 
--- ===================== ÁRBOL COMPLETAMENTE REDISEÑADO =====================
+-- ===================== ÁRBOL TERRORÍFICO CON HOJAS NEGRAS =====================
 local function createTree(position)
     local treeModel = Instance.new("Model")
     treeModel.Name = "TerrifyingTree"
@@ -216,7 +216,7 @@ local function createTree(position)
     local trunkHeight = randFloat(TRUNK_HEIGHT_MIN, TRUNK_HEIGHT_MAX)
     local baseWidth = randFloat(TRUNK_BASE_WIDTH_MIN, TRUNK_BASE_WIDTH_MAX)
     
-    -- TRONCO VERTICAL
+    -- TRONCO PRINCIPAL
     local trunk = Instance.new("Part")
     trunk.Name = "Trunk"
     trunk.Size = Vector3.new(baseWidth, trunkHeight, baseWidth)
@@ -227,25 +227,113 @@ local function createTree(position)
     trunk.Anchored = true
     trunk.Parent = treeModel
     
-    -- RAMAS SIMPLES
-    for level = 1, 3 do
-        local heightPercent = 0.5 + (level * 0.15)
-        for i = 1, 4 do
+    -- RAÍCES PEGADAS AL SUELO
+    for i = 1, 6 do
+        local root = Instance.new("Part")
+        root.Name = "Root"
+        local rootLength = randFloat(4, 7)
+        local rootThick = randFloat(1.5, 2.5)
+        root.Size = Vector3.new(rootThick, rootLength, rootThick)
+        
+        local angle = math.rad((360 / 6) * i)
+        
+        root.CFrame = CFrame.new(position + Vector3.new(0, rootLength/4, 0)) *
+        CFrame.Angles(0, angle, 0) *
+        CFrame.Angles(math.rad(70), 0, 0) *
+        CFrame.new(0, rootLength/2, 0)
+        
+        applyTerrifyingStyle(root, true)
+        root.Anchored = true
+        root.Parent = treeModel
+    end
+    
+    -- RAMAS PRINCIPALES CON HOJAS
+    local branchLevels = {0.5, 0.65, 0.8}
+    
+    for levelIdx, heightPercent in ipairs(branchLevels) do
+        local branchesInLevel = 5
+        
+        for i = 1, branchesInLevel do
+            local branchLength = randFloat(5, 8)
+            local branchThick = randFloat(1.5, 2)
+            
+            local angle = math.rad((360 / branchesInLevel) * i + randFloat(-10, 10))
+            local branchY = position.Y + (trunkHeight * heightPercent)
+            
+            -- Rama
             local branch = Instance.new("Part")
             branch.Name = "Branch"
-            branch.Size = Vector3.new(2.5, 8, 2.5)
-            
-            local angle = math.rad((360 / 4) * i)
-            local branchY = position.Y + (trunkHeight * heightPercent)
+            branch.Size = Vector3.new(branchThick, branchLength, branchThick)
             
             branch.CFrame = CFrame.new(position.X, branchY, position.Z) *
             CFrame.Angles(0, angle, 0) *
-            CFrame.Angles(math.rad(45), 0, 0) *
-            CFrame.new(0, 4, 0)
+            CFrame.Angles(math.rad(40), 0, 0) *
+            CFrame.new(0, branchLength/2, 0)
             
             applyTerrifyingStyle(branch, true)
             branch.Anchored = true
             branch.Parent = treeModel
+            
+            -- HOJAS NEGRAS en el extremo de cada rama
+            local leafCluster = branch.CFrame * CFrame.new(0, branchLength/2, 0)
+            
+            for j = 1, 8 do
+                local leaf = Instance.new("Part")
+                leaf.Name = "Leaf"
+                leaf.Size = Vector3.new(randFloat(1.5, 2.5), randFloat(0.2, 0.4), randFloat(1.5, 2.5))
+                leaf.Shape = Enum.PartType.Ball
+                
+                local leafOffset = Vector3.new(
+                    randFloat(-2, 2),
+                    randFloat(-1, 1),
+                    randFloat(-2, 2)
+                )
+                
+                leaf.CFrame = leafCluster * CFrame.new(leafOffset)
+                leaf.Material = Enum.Material.Plastic
+                leaf.Color = Color3.fromRGB(15, 15, 20)
+                leaf.Anchored = true
+                leaf.CanCollide = false
+                leaf.TopSurface = Enum.SurfaceType.Smooth
+                leaf.BottomSurface = Enum.SurfaceType.Smooth
+                leaf.Parent = treeModel
+            end
+            
+            -- Sub-rama pequeña
+            if math.random() > 0.5 then
+                local subBranch = Instance.new("Part")
+                subBranch.Name = "SubBranch"
+                local subLength = randFloat(3, 5)
+                subBranch.Size = Vector3.new(1, subLength, 1)
+                
+                subBranch.CFrame = branch.CFrame *
+                CFrame.new(0, branchLength * 0.5, 0) *
+                CFrame.Angles(math.rad(randFloat(-30, 30)), math.rad(randFloat(0, 360)), 0) *
+                CFrame.new(0, subLength/2, 0)
+                
+                applyTerrifyingStyle(subBranch, true)
+                subBranch.Anchored = true
+                subBranch.Parent = treeModel
+                
+                -- Hojas en sub-rama
+                local subLeafPos = subBranch.CFrame * CFrame.new(0, subLength/2, 0)
+                for k = 1, 5 do
+                    local subLeaf = Instance.new("Part")
+                    subLeaf.Name = "Leaf"
+                    subLeaf.Size = Vector3.new(randFloat(1, 1.5), 0.3, randFloat(1, 1.5))
+                    subLeaf.Shape = Enum.PartType.Ball
+                    
+                    local offset = Vector3.new(randFloat(-1, 1), randFloat(-0.5, 0.5), randFloat(-1, 1))
+                    subLeaf.CFrame = subLeafPos * CFrame.new(offset)
+                    subLeaf.Material = Enum.Material.Plastic
+                    subLeaf.Color = Color3.fromRGB(15, 15, 20)
+                    subLeaf.Anchored = true
+                    subLeaf.CanCollide = false
+                    subLeaf.TopSurface = Enum.SurfaceType.Smooth
+                    subLeaf.BottomSurface = Enum.SurfaceType.Smooth
+                    subLeaf.Parent = treeModel
+                end
+            end
         end
     end
     
