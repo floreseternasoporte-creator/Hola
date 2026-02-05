@@ -1114,8 +1114,8 @@ local function createPowerActivationEffect(powerName, color)
                     shopModal.Size = UDim2.new(0, 0, 0, 0)
                     shopModal.Position = UDim2.new(0.5, 0, 0.5, 0)
                     TweenService:Create(shopModal, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-                    Size = UDim2.new(0, 620, 0, 340),
-                    Position = UDim2.new(0.5, -310, 0.5, -170)
+                    Size = UDim2.new(0, 700, 0, 400),
+                    Position = UDim2.new(0.5, -350, 0.5, -200)
                     }):Play()
                 else
                     TweenService:Create(shopModal, TweenInfo.new(0.3, Enum.EasingStyle.Back, Enum.EasingDirection.In), {
