@@ -44,7 +44,8 @@ Explosion = 20,
 Control = 25,
 Protection = 60,
 Healing = 18,
-Lightning = 12
+Lightning = 12,
+MindClone = 30
 }
  
 local cooldowns = {}
@@ -72,7 +73,8 @@ local POWER_DATA = {
 {Name = "Control", Key = "R", Color = Color3.fromRGB(255, 140, 0), Rarity = "Epic", Description = "Control mental masivo de área", Icon = "🌀", Price = 100, Position = UDim2.new(1, -160, 1, -180)},
 {Name = "Protection", Key = "T", Color = Color3.fromRGB(255, 10, 10), Rarity = "Legendary", Description = "Escudo protector temporal", Icon = "🛡", Price = 150, Position = UDim2.new(1, -90, 1, -110)},
 {Name = "Healing", Key = "F", Color = Color3.fromRGB(0, 255, 127), Rarity = "Rare", Description = "Curación instantánea", Icon = "❤", Price = 75, Position = UDim2.new(1, -20, 1, -160)},
-{Name = "Lightning", Key = "G", Color = Color3.fromRGB(100, 200, 255), Rarity = "Epic", Description = "Rayo devastador azul eléctrico", Icon = "⚡", Price = 120, Position = UDim2.new(1, -20, 1, -90)}
+{Name = "Lightning", Key = "G", Color = Color3.fromRGB(100, 200, 255), Rarity = "Epic", Description = "Rayo devastador azul eléctrico", Icon = "⚡", Price = 120, Position = UDim2.new(1, -20, 1, -90)},
+{Name = "MindClone", Key = "H", Color = Color3.fromRGB(180, 50, 255), Rarity = "Legendary", Description = "Crea un clon mental que ataca al objetivo", Icon = "👤", Price = 200, Position = UDim2.new(1, -160, 1, -110)}
 }
  
 -- INICIALIZAR COOLDOWNS
@@ -283,8 +285,8 @@ local function createPowerActivationEffect(powerName, color)
         local function createCompactShop(screenGui)
             local shopModal = Instance.new("Frame")
             shopModal.Name = "ShopModal"
-            shopModal.Size = UDim2.new(0, 700, 0, 400)
-            shopModal.Position = UDim2.new(0.5, -350, 0.5, -200)
+            shopModal.Size = UDim2.new(0, 600, 0, 380)
+            shopModal.Position = UDim2.new(0.5, -300, 0.5, -190)
             shopModal.BackgroundColor3 = Color3.fromRGB(15, 10, 15)
             shopModal.BorderSizePixel = 0
             shopModal.Visible = false
@@ -1114,8 +1116,8 @@ local function createPowerActivationEffect(powerName, color)
                     shopModal.Size = UDim2.new(0, 0, 0, 0)
                     shopModal.Position = UDim2.new(0.5, 0, 0.5, 0)
                     TweenService:Create(shopModal, TweenInfo.new(0.4, Enum.EasingStyle.Back, Enum.EasingDirection.Out), {
-                    Size = UDim2.new(0, 700, 0, 400),
-                    Position = UDim2.new(0.5, -350, 0.5, -200)
+                    Size = UDim2.new(0, 600, 0, 380),
+                    Position = UDim2.new(0.5, -300, 0.5, -190)
                     }):Play()
                 else
                     print("❌ Cerrando tienda...")
