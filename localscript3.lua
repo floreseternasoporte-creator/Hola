@@ -209,7 +209,7 @@ local function createPowerActivationEffect(powerName, color)
             local shopButton = Instance.new("ImageButton")
             shopButton.Name = "ShopButton"
             shopButton.Size = UDim2.new(0, 52, 0, 52)
-            shopButton.Position = UDim2.new(0, 15, 0, 95)
+            shopButton.Position = UDim2.new(0, 15, 0, 160)
             shopButton.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
             shopButton.BackgroundTransparency = 0.1
             shopButton.BorderSizePixel = 0
