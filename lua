@@ -9,7 +9,7 @@
 🎬 CARACTERÍSTICAS ULTRA-ÉPICAS Y 100% VISIBLES:
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ⚡ RAYOS ROJOS FINOS Y BRILLANTES (8 Capas Stranger Things Style)
-☀️  MUNDO EQUILIBRADO (Brightness 2.0 + ClockTime 10 = Tarde atmosférica)
+☀️  ATMÓSFERA OSCURA STRANGER THINGS (Brightness 1.0 + ClockTime 0 = Noche)
 💀 SISTEMA DE DAÑO POR PROXIMIDAD (80-100 HP directo, 30-60 cercano)
 🌫️ ESPORAS LUMINOSAS DENSAS (500+ flotando + 150 ascendiendo)
 ✨ ILUMINACIÓN AMBIENTAL MUY BRILLANTE (puedes ver TODO)
@@ -189,19 +189,19 @@ IMPACT_RANGE = 250,
 IMPACT_BRIGHTNESS = 180,
 MEGA_BRIGHTNESS = 240,
 SKY_FLASH = 0.9,
-BLOOM_INTENSITY = 5.5,
-BLOOM_SIZE = 120,
-AMBIENT_LIGHT = Color3.fromRGB(60, 50, 70),      -- Equilibrado con toque púrpura
-OUTDOOR_AMBIENT = Color3.fromRGB(70, 55, 80),    -- Equilibrado
+BLOOM_INTENSITY = 1.5,
+BLOOM_SIZE = 24,
+AMBIENT_LIGHT = Color3.fromRGB(25, 20, 35),      -- Oscuro con toque púrpura
+OUTDOOR_AMBIENT = Color3.fromRGB(30, 25, 40),    -- Oscuro
 GOD_RAYS_INTENSITY = 0.35,
 },
  
 -- 🎨 COLOR GRADING VISIBLE
 COLOR = {
-TINT = Color3.fromRGB(200, 180, 220),    -- Tinte más claro
-SATURATION = -0.05,                       -- Casi normal
-CONTRAST = 0.15,                          -- Menos contraste
-BRIGHTNESS = 0.15,                        -- Equilibrado
+TINT = Color3.fromRGB(120, 100, 140),    -- Tinte oscuro púrpura
+SATURATION = -0.15,                       -- Menos saturación
+CONTRAST = 0.25,                          -- Más contraste
+BRIGHTNESS = 0.0,                         -- Sin brightness extra
 },
  
 -- 🌍 ÁREA
@@ -1350,10 +1350,10 @@ function DamageSystem:ApplyRagdoll(character, duration)
                     -- Ambient - MUY BRILLANTE para que se vea todo
                     Lighting.Ambient = CONFIG.LIGHTING.AMBIENT_LIGHT
                     Lighting.OutdoorAmbient = CONFIG.LIGHTING.OUTDOOR_AMBIENT
-                    Lighting.Brightness = 2.0                          -- Equilibrado
-                    Lighting.ColorShift_Top = Color3.fromRGB(110, 90, 120)    -- Púrpura sutil
-                    Lighting.ColorShift_Bottom = Color3.fromRGB(90, 70, 100)  -- Púrpura sutil
-                    Lighting.ClockTime = 10                            -- Tarde (10 AM - equilibrado)
+                    Lighting.Brightness = 1.0                          -- Oscuro
+                    Lighting.ColorShift_Top = Color3.fromRGB(80, 60, 100)     -- Púrpura oscuro
+                    Lighting.ColorShift_Bottom = Color3.fromRGB(60, 40, 80)   -- Púrpura muy oscuro
+                    Lighting.ClockTime = 0                             -- Medianoche (oscuro)
                     Lighting.GeographicLatitude = 0
                     
                     -- Bloom MEGA-intenso para que los rayos rojos resalten
@@ -1383,8 +1383,8 @@ function DamageSystem:ApplyRagdoll(character, duration)
                     -- Atmosphere MUY LIGERA (apenas visible)
                     if not Lighting:FindFirstChild("Atmosphere") then
                         local atmo = Instance.new("Atmosphere")
-                        atmo.Density = 0.25                            -- MUY ligera
-                        atmo.Offset = 0.15                             -- Menos offset
+                        atmo.Density = 0.4                             -- Niebla visible
+                        atmo.Offset = 0.25                             -- Offset medio
                         atmo.Color = Color3.fromRGB(100, 80, 110)     -- Púrpura claro
                         atmo.Decay = Color3.fromRGB(90, 70, 100)      -- Decay púrpura claro
                         atmo.Glare = 0.8                               -- Mucho resplandor
@@ -1417,7 +1417,7 @@ function DamageSystem:ApplyRagdoll(character, duration)
                     warn("║  🔴 RAYOS ROJOS FINOS (8 Capas Stranger Things)                     ║")
                     warn("║  💀 SISTEMA DE DAÑO ACTIVADO (80-100 HP directo)                     ║")
                     warn("║  🌫️  ESPORAS LUMINOSAS (500+ flotando + 150 ascendiendo)            ║")
-                    warn("║  ☀️  MUNDO EQUILIBRADO - Brightness 2.0 + ClockTime 10 (TARDE)      ║")
+                    warn("║  🌙 ATMÓSFERA OSCURA - Brightness 1.0 + ClockTime 0 (NOCHE)    ║")
                     warn("║  🌟 GRÁFICOS MODERNOS - Sin efectos vintage                         ║")
                     warn("║  ✨ AMBIENTE BRILLANTE con toques púrpura                           ║")
                     warn("║  💫 Bloom Ultra + God Rays                                          ║")
