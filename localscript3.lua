@@ -58,8 +58,8 @@ local POWER_DATA = {
 {Name = "Telekinesis", Key = "Q", Color = Color3.fromRGB(138, 43, 226), Rarity = "Common", Description = "Levita y controla enemigos con tu mente", Icon = "⚡", Price = 20, Position = UDim2.new(1, -90, 1, -180)},
 {Name = "Explosion", Key = "E", Color = Color3.fromRGB(255, 20, 20), Rarity = "Rare", Description = "Explosión psíquica devastadora", Icon = "💥", Price = 50, Position = UDim2.new(1, -20, 1, -230)},
 {Name = "Control", Key = "R", Color = Color3.fromRGB(255, 140, 0), Rarity = "Epic", Description = "Control mental masivo de área", Icon = "🌀", Price = 100, Position = UDim2.new(1, -160, 1, -180)},
-{Name = "Protection", Key = "T", Color = Color3.fromRGB(255, 10, 10), Rarity = "Legendary", Description = "Escudo protector temporal", Icon = "🛡️", Price = 150, Position = UDim2.new(1, -90, 1, -110)},
-{Name = "Healing", Key = "F", Color = Color3.fromRGB(0, 255, 127), Rarity = "Rare", Description = "Curación instantánea", Icon = "💚", Price = 75, Position = UDim2.new(1, -20, 1, -160)},
+{Name = "Protection", Key = "T", Color = Color3.fromRGB(255, 10, 10), Rarity = "Legendary", Description = "Escudo protector temporal", Icon = "🛡", Price = 150, Position = UDim2.new(1, -90, 1, -110)},
+{Name = "Healing", Key = "F", Color = Color3.fromRGB(0, 255, 127), Rarity = "Rare", Description = "Curación instantánea", Icon = "❤", Price = 75, Position = UDim2.new(1, -20, 1, -160)},
 {Name = "Lightning", Key = "G", Color = Color3.fromRGB(100, 200, 255), Rarity = "Epic", Description = "Rayo devastador azul eléctrico", Icon = "⚡", Price = 120, Position = UDim2.new(1, -20, 1, -90)}
 }
  
@@ -601,7 +601,7 @@ local function createPowerActivationEffect(powerName, color)
                     stockLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
                 end
                 
-                priceLabel.Text = power.Price .. " 🪵 MADERA"
+                priceLabel.Text = power.Price .. " MADERA"
                 priceLabel.TextColor3 = Color3.fromRGB(139, 69, 19)
                 
                 rarityBadge.Text = power.Rarity
@@ -615,7 +615,7 @@ local function createPowerActivationEffect(powerName, color)
                     actionButton.Text = "⏳ NO DISPONIBLE"
                     actionButton.BackgroundColor3 = Color3.fromRGB(80, 80, 80)
                 else
-                    actionButton.Text = "💰 COMPRAR " .. power.Price .. " 🪵"
+                    actionButton.Text = "COMPRAR " .. power.Price .. " MADERA"
                     actionButton.BackgroundColor3 = Color3.fromRGB(139, 69, 19)
                 end
                 
@@ -658,7 +658,7 @@ local function createPowerActivationEffect(powerName, color)
                 if not woodValue then return end
                 
                 if woodValue.Value < selectedPower.Price then
-                    showFeedback("❌ NO TIENES SUFICIENTE MADERA (" .. selectedPower.Price .. " 🪵)", Color3.fromRGB(255, 100, 100))
+                    showFeedback("❌ NO TIENES SUFICIENTE MADERA (" .. selectedPower.Price .. ")", Color3.fromRGB(255, 100, 100))
                     return
                 end
                 
@@ -924,7 +924,7 @@ local function createPowerActivationEffect(powerName, color)
             end)
         end
         
-        -- OBTENER JUGADOR OBJETIVO
+        -- OBTENER JUGADOR O NPC OBJETIVO
         local function getTargetPlayer()
             local mouse = player:GetMouse()
             local mouseTarget = mouse.Target
@@ -937,24 +937,44 @@ local function createPowerActivationEffect(powerName, color)
                     if targetPlayer and targetPlayer ~= player then
                         return targetPlayer
                     end
+                    
+                    -- Si no es jugador, verificar si es un NPC/Demogorgon
+                    if not targetPlayer and character:FindFirstChild("HumanoidRootPart") then
+                        return character
+                    end
                 end
             end
             
             local playerCharacter = player.Character
             if playerCharacter and playerCharacter:FindFirstChild("HumanoidRootPart") then
-                local closestPlayer, closestDistance = nil, MAX_TARGET_RANGE
+                local closestTarget, closestDistance = nil, MAX_TARGET_RANGE
                 
+                -- Buscar jugadores cercanos
                 for _, otherPlayer in pairs(Players:GetPlayers()) do
                     if otherPlayer ~= player and otherPlayer.Character and otherPlayer.Character:FindFirstChild("HumanoidRootPart") then
                         local distance = (playerCharacter.HumanoidRootPart.Position - otherPlayer.Character.HumanoidRootPart.Position).Magnitude
                         if distance < closestDistance then
                             closestDistance = distance
-                            closestPlayer = otherPlayer
+                            closestTarget = otherPlayer
                         end
                     end
                 end
                 
-                return closestPlayer
+                -- Buscar NPCs/Demogorgons cercanos
+                for _, model in pairs(workspace:GetChildren()) do
+                    if model:IsA("Model") and model:FindFirstChild("Humanoid") and model:FindFirstChild("HumanoidRootPart") then
+                        local isPlayerChar = Players:GetPlayerFromCharacter(model)
+                        if not isPlayerChar and model ~= playerCharacter then
+                            local distance = (playerCharacter.HumanoidRootPart.Position - model.HumanoidRootPart.Position).Magnitude
+                            if distance < closestDistance then
+                                closestDistance = distance
+                                closestTarget = model
+                            end
+                        end
+                    end
+                end
+                
+                return closestTarget
             end
             
             return nil
@@ -976,7 +996,7 @@ local function createPowerActivationEffect(powerName, color)
             
             local targetRequired = (powerName == "Telekinesis" or powerName == "Explosion" or powerName == "Healing" or powerName == "Lightning")
             if targetRequired and not target then
-                showFeedback("⚠️ APUNTA A UN JUGADOR", Color3.fromRGB(255, 150, 50))
+                showFeedback("⚠️ APUNTA A UN OBJETIVO", Color3.fromRGB(255, 150, 50))
                 return
             end
             

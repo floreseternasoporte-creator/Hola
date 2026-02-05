@@ -358,10 +358,19 @@ end
 -- PODER 1: TELEQUINESIS ULTRA ÉPICA (GRÁFICOS EXTREMOS)
 local function useTelekinesis(player, targetPlayer)
     local character = player.Character
-    local targetCharacter = targetPlayer.Character
+    local targetCharacter = targetPlayer.Character or targetPlayer -- Puede ser jugador o NPC
     
-    if not character or not targetCharacter or not targetPlayer:IsA("Player") then return end
-    if not checkAndSetCooldown(player.UserId, "Telekinesis", POWER_CONFIG.Telekinesis.Cooldown) then return end
+    if not character or not targetCharacter then return end
+    
+    -- Verificar si es jugador o NPC
+    local isPlayer = targetPlayer:IsA("Player")
+    
+    if isPlayer then
+        if not checkAndSetCooldown(player.UserId, "Telekinesis", POWER_CONFIG.Telekinesis.Cooldown) then return end
+    else
+        -- Para NPCs, verificar cooldown igual
+        if not checkAndSetCooldown(player.UserId, "Telekinesis", POWER_CONFIG.Telekinesis.Cooldown) then return end
+    end
     
     local distance = (character.HumanoidRootPart.Position - targetCharacter.HumanoidRootPart.Position).Magnitude
     if distance > POWER_CONFIG.Telekinesis.Range then return end
@@ -592,10 +601,18 @@ end
 -- PODER 2: EXPLOSIÓN MEJORADA
 local function useExplosion(player, targetPlayer)
     local character = player.Character
-    local targetCharacter = targetPlayer.Character
+    local targetCharacter = targetPlayer.Character or targetPlayer -- Puede ser jugador o NPC
     
-    if not character or not targetCharacter or not targetPlayer:IsA("Player") then return end
-    if not checkAndSetCooldown(player.UserId, "Explosion", POWER_CONFIG.Explosion.Cooldown) then return end
+    if not character or not targetCharacter then return end
+    
+    -- Verificar si es jugador o NPC
+    local isPlayer = targetPlayer:IsA("Player")
+    
+    if isPlayer then
+        if not checkAndSetCooldown(player.UserId, "Explosion", POWER_CONFIG.Explosion.Cooldown) then return end
+    else
+        if not checkAndSetCooldown(player.UserId, "Explosion", POWER_CONFIG.Explosion.Cooldown) then return end
+    end
     
     local distance = (character.HumanoidRootPart.Position - targetCharacter.HumanoidRootPart.Position).Magnitude
     if distance > POWER_CONFIG.Explosion.Range then return end
@@ -1005,13 +1022,21 @@ local function useProtection(player)
             if userLight then userLight:Destroy() end
         end
         
-        -- PODER 5: CURACIÓN (MEJORADA)
+        -- CURACIÓN (MEJORADA)
         local function useHealing(player, targetPlayer)
             local character = player.Character
-            local targetCharacter = targetPlayer.Character
+            local targetCharacter = targetPlayer.Character or targetPlayer -- Puede ser jugador o NPC
             
-            if not character or not targetCharacter or not targetPlayer:IsA("Player") then return end
-            if not checkAndSetCooldown(player.UserId, "Healing", POWER_CONFIG.Healing.Cooldown) then return end
+            if not character or not targetCharacter then return end
+            
+            -- Verificar si es jugador o NPC
+            local isPlayer = targetPlayer:IsA("Player")
+            
+            if isPlayer then
+                if not checkAndSetCooldown(player.UserId, "Healing", POWER_CONFIG.Healing.Cooldown) then return end
+            else
+                if not checkAndSetCooldown(player.UserId, "Healing", POWER_CONFIG.Healing.Cooldown) then return end
+            end
             
             local distance = (character.HumanoidRootPart.Position - targetCharacter.HumanoidRootPart.Position).Magnitude
             if distance > POWER_CONFIG.Healing.Range then return end
@@ -1225,10 +1250,18 @@ local function useProtection(player)
         -- PODER 6: RAYO AZUL ÉPICO (NUEVO)
         local function useLightning(player, targetPlayer)
             local character = player.Character
-            local targetCharacter = targetPlayer.Character
+            local targetCharacter = targetPlayer.Character or targetPlayer -- Puede ser jugador o NPC
             
-            if not character or not targetCharacter or not targetPlayer:IsA("Player") then return end
-            if not checkAndSetCooldown(player.UserId, "Lightning", POWER_CONFIG.Lightning.Cooldown) then return end
+            if not character or not targetCharacter then return end
+            
+            -- Verificar si es jugador o NPC
+            local isPlayer = targetPlayer:IsA("Player")
+            
+            if isPlayer then
+                if not checkAndSetCooldown(player.UserId, "Lightning", POWER_CONFIG.Lightning.Cooldown) then return end
+            else
+                if not checkAndSetCooldown(player.UserId, "Lightning", POWER_CONFIG.Lightning.Cooldown) then return end
+            end
             
             local distance = (character.HumanoidRootPart.Position - targetCharacter.HumanoidRootPart.Position).Magnitude
             if distance > POWER_CONFIG.Lightning.Range then return end
@@ -1530,14 +1563,24 @@ local function useProtection(player)
         
         -- Conectar eventos
         telekinesisPower.OnServerEvent:Connect(function(player, targetPlayer)
-            if targetPlayer and targetPlayer:IsA("Player") then
-                useTelekinesis(player, targetPlayer)
+            if targetPlayer then
+                -- Puede ser un jugador o un modelo NPC
+                if targetPlayer:IsA("Player") then
+                    useTelekinesis(player, targetPlayer)
+                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") then
+                    -- Es un NPC/Demogorgon
+                    useTelekinesis(player, targetPlayer)
+                end
             end
         end)
         
         explosionPower.OnServerEvent:Connect(function(player, targetPlayer)
-            if targetPlayer and targetPlayer:IsA("Player") then
-                useExplosion(player, targetPlayer)
+            if targetPlayer then
+                if targetPlayer:IsA("Player") then
+                    useExplosion(player, targetPlayer)
+                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") then
+                    useExplosion(player, targetPlayer)
+                end
             end
         end)
         
@@ -1550,14 +1593,22 @@ local function useProtection(player)
         end)
         
         healingPower.OnServerEvent:Connect(function(player, targetPlayer)
-            if targetPlayer and targetPlayer:IsA("Player") then
-                useHealing(player, targetPlayer)
+            if targetPlayer then
+                if targetPlayer:IsA("Player") then
+                    useHealing(player, targetPlayer)
+                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") then
+                    useHealing(player, targetPlayer)
+                end
             end
         end)
         
         lightningPower.OnServerEvent:Connect(function(player, targetPlayer)
-            if targetPlayer and targetPlayer:IsA("Player") then
-                useLightning(player, targetPlayer)
+            if targetPlayer then
+                if targetPlayer:IsA("Player") then
+                    useLightning(player, targetPlayer)
+                elseif targetPlayer:IsA("Model") and targetPlayer:FindFirstChild("Humanoid") then
+                    useLightning(player, targetPlayer)
+                end
             end
         end)
         
