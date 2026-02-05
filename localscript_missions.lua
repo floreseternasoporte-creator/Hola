@@ -381,7 +381,7 @@ if walkieTalkieFound then
         -- Sonido de recogida
         local pickupSound = Instance.new("Sound")
         pickupSound.SoundId = "rbxassetid://7039027381"
-        pickupSound.Volume = 0.7
+        pickupSound.Volume = 2
         pickupSound.Parent = workspace
         pickupSound:Play()
         pickupSound.Ended:Connect(function()
