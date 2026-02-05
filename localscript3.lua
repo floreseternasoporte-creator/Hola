@@ -10,22 +10,32 @@ local MarketplaceService = game:GetService("MarketplaceService")
 local player = Players.LocalPlayer
  
 print("🔥 Power Shop - Starting...")
- 
--- ESPERAR EVENTOS
-local powerEvents = ReplicatedStorage:WaitForChild("PowerEvents", 10)
+
+-- ESPERAR EVENTOS CON TIMEOUT CORTO
+local powerEvents = ReplicatedStorage:WaitForChild("PowerEvents", 3)
 if not powerEvents then
-    warn("❌ PowerEvents not found!")
-    return
+    warn("❌ PowerEvents not found! Creating UI anyway...")
+else
+    print("✅ PowerEvents found")
 end
 
-local purchaseEvent = ReplicatedStorage:WaitForChild("PurchasePowerEvent", 5)
- 
-local telekinesisPower = powerEvents:WaitForChild("TelekinesisPower", 5)
-local explosionPower = powerEvents:WaitForChild("ExplosionPower", 5)
-local controlPower = powerEvents:WaitForChild("ControlPower", 5)
-local protectionPower = powerEvents:WaitForChild("ProtectionPower", 5)
-local healingPower = powerEvents:WaitForChild("HealingPower", 5)
-local lightningPower = powerEvents:WaitForChild("LightningPower", 5)
+local purchaseEvent = ReplicatedStorage:FindFirstChild("PurchasePowerEvent")
+if purchaseEvent then
+    print("✅ PurchasePowerEvent found")
+else
+    warn("⚠️ PurchasePowerEvent not found, using fallback")
+end
+
+local telekinesisPower, explosionPower, controlPower, protectionPower, healingPower, lightningPower
+
+if powerEvents then
+    telekinesisPower = powerEvents:WaitForChild("TelekinesisPower", 3)
+    explosionPower = powerEvents:WaitForChild("ExplosionPower", 3)
+    controlPower = powerEvents:WaitForChild("ControlPower", 3)
+    protectionPower = powerEvents:WaitForChild("ProtectionPower", 3)
+    healingPower = powerEvents:WaitForChild("HealingPower", 3)
+    lightningPower = powerEvents:WaitForChild("LightningPower", 3)
+end
  
 -- CONFIGURACIÓN
 local COOLDOWN_TIMES = {
@@ -1014,22 +1024,22 @@ local function createPowerActivationEffect(powerName, color)
             end
             
             local success = false
-            if powerName == "Telekinesis" and target then
+            if powerName == "Telekinesis" and target and telekinesisPower then
                 telekinesisPower:FireServer(target)
                 success = true
-            elseif powerName == "Explosion" and target then
+            elseif powerName == "Explosion" and target and explosionPower then
                 explosionPower:FireServer(target)
                 success = true
-            elseif powerName == "Control" then
+            elseif powerName == "Control" and controlPower then
                 controlPower:FireServer()
                 success = true
-            elseif powerName == "Protection" then
+            elseif powerName == "Protection" and protectionPower then
                 protectionPower:FireServer()
                 success = true
-            elseif powerName == "Healing" and target then
+            elseif powerName == "Healing" and target and healingPower then
                 healingPower:FireServer(target)
                 success = true
-            elseif powerName == "Lightning" and target then
+            elseif powerName == "Lightning" and target and lightningPower then
                 lightningPower:FireServer(target)
                 success = true
             end
