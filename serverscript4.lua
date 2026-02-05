@@ -355,6 +355,7 @@ local function createScreenDistortion(character, color)
 end
  
 -- PODER 1: TELEKINESIS ÉPICA (MEJORADA)
+-- PODER 1: TELEQUINESIS ULTRA ÉPICA (GRÁFICOS EXTREMOS)
 local function useTelekinesis(player, targetPlayer)
     local character = player.Character
     local targetCharacter = targetPlayer.Character
@@ -367,49 +368,175 @@ local function useTelekinesis(player, targetPlayer)
     
     local config = POWER_CONFIG.Telekinesis
     
+    -- EFECTOS EN USUARIO (MASIVOS)
     local userEffects = createAdvancedParticles(character.Head, config.Color, "telekinesis")
     local noseBleed = createNoseBleed(character)
     local userLight = createScreenDistortion(character, config.Color)
     
+    -- EFECTOS EN OBJETIVO (MASIVOS)
     local targetEffects = createAdvancedParticles(targetCharacter.Head, config.Color, "telekinesis")
     local targetLight = createScreenDistortion(targetCharacter, config.Color)
     
+    -- RAYOS CONECTORES (MÚLTIPLES)
     local att0 = Instance.new("Attachment", character.Head)
     local att1 = Instance.new("Attachment", targetCharacter.Head)
     local beams = createEpicBeam(att0, att1, config.Color)
     
+    -- SONIDOS
     local activationSound, loopSound = createPowerSounds(character.Head, config)
     
-    -- Múltiples ondas de choque concéntricas
-    for i = 1, 5 do
+    -- ONDAS DE CHOQUE MASIVAS (15 CAPAS)
+    for i = 1, 15 do
         task.spawn(function()
-            task.wait(i * 0.1)
+            task.wait(i * 0.05)
             local shockwave = Instance.new("Part")
             shockwave.Shape = Enum.PartType.Cylinder
-            shockwave.Size = Vector3.new(0.5, 1, 1)
+            shockwave.Size = Vector3.new(0.5, 2, 2)
             shockwave.Material = Enum.Material.Neon
             shockwave.Color = config.Color
             shockwave.Anchored = true
             shockwave.CanCollide = false
             shockwave.CFrame = CFrame.new(character.HumanoidRootPart.Position) * CFrame.Angles(0, 0, math.rad(90))
-            shockwave.Transparency = 0.2 + (i * 0.1)
+            shockwave.Transparency = 0.1
             shockwave.Parent = workspace
             
             local shockLight = Instance.new("PointLight")
             shockLight.Color = config.Color
-            shockLight.Brightness = 10
-            shockLight.Range = 20
+            shockLight.Brightness = 15
+            shockLight.Range = 30
+            shockLight.Shadows = true
             shockLight.Parent = shockwave
             
-            TweenService:Create(shockwave, TweenInfo.new(0.6, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
-            Size = Vector3.new(0.5, 40 + (i * 5), 40 + (i * 5)),
+            TweenService:Create(shockwave, TweenInfo.new(0.8, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {
+            Size = Vector3.new(0.5, 60 + (i * 8), 60 + (i * 8)),
             Transparency = 1
             }):Play()
-            TweenService:Create(shockLight, TweenInfo.new(0.6), {Brightness = 0}):Play()
-            Debris:AddItem(shockwave, 0.6)
+            TweenService:Create(shockLight, TweenInfo.new(0.8), {Brightness = 0}):Play()
+            Debris:AddItem(shockwave, 0.8)
         end)
     end
     
+    -- PARTÍCULAS ORBITALES MASIVAS
+    for i = 1, 50 do
+        task.spawn(function()
+            local orb = Instance.new("Part")
+            orb.Shape = Enum.PartType.Ball
+            orb.Size = Vector3.new(2, 2, 2)
+            orb.Material = Enum.Material.Neon
+            orb.Color = config.Color
+            orb.Anchored = true
+            orb.CanCollide = false
+            orb.Transparency = 0.3
+            orb.Parent = workspace
+            
+            local orbLight = Instance.new("PointLight")
+            orbLight.Color = config.Color
+            orbLight.Brightness = 10
+            orbLight.Range = 15
+            orbLight.Parent = orb
+            
+            local angle = (i / 50) * math.pi * 2
+            local radius = 10
+            
+            for t = 0, config.Duration, 0.05 do
+                if orb and orb.Parent then
+                    local newAngle = angle + (t * 3)
+                    local pos = targetCharacter.HumanoidRootPart.Position + Vector3.new(
+                        math.cos(newAngle) * radius,
+                        math.sin(t * 5) * 3,
+                        math.sin(newAngle) * radius
+                    )
+                    orb.Position = pos
+                end
+                task.wait(0.05)
+            end
+            
+            TweenService:Create(orb, TweenInfo.new(0.3), {Transparency = 1}):Play()
+            TweenService:Create(orbLight, TweenInfo.new(0.3), {Brightness = 0}):Play()
+            task.wait(0.3)
+            orb:Destroy()
+        end)
+    end
+    
+    -- ANILLOS ENERGÉTICOS GIRATORIOS (10 ANILLOS)
+    for i = 1, 10 do
+        task.spawn(function()
+            local ring = Instance.new("Part")
+            ring.Shape = Enum.PartType.Cylinder
+            ring.Size = Vector3.new(0.3, 15, 15)
+            ring.Material = Enum.Material.Neon
+            ring.Color = config.Color
+            ring.Anchored = true
+            ring.CanCollide = false
+            ring.Transparency = 0.2
+            ring.Parent = workspace
+            
+            for t = 0, config.Duration, 0.03 do
+                if ring and ring.Parent then
+                    ring.CFrame = CFrame.new(targetCharacter.HumanoidRootPart.Position) *
+                    CFrame.Angles(math.rad(i * 36), math.rad(t * 100), 0)
+                end
+                task.wait(0.03)
+            end
+            
+            TweenService:Create(ring, TweenInfo.new(0.5), {Transparency = 1, Size = Vector3.new(0.3, 25, 25)}):Play()
+            task.wait(0.5)
+            ring:Destroy()
+        end)
+    end
+    
+    -- RAYOS SECUNDARIOS (20 RAYOS)
+    for i = 1, 20 do
+        task.spawn(function()
+            task.wait(i * 0.1)
+            local beam = Instance.new("Part")
+            beam.Size = Vector3.new(0.5, 0.5, distance)
+            beam.Material = Enum.Material.Neon
+            beam.Color = config.Color
+            beam.Anchored = true
+            beam.CanCollide = false
+            beam.Transparency = 0.4
+            beam.CFrame = CFrame.new(character.Head.Position, targetCharacter.Head.Position) * CFrame.new(0, 0, -distance/2)
+            beam.Parent = workspace
+            
+            TweenService:Create(beam, TweenInfo.new(0.3), {Transparency = 1}):Play()
+            Debris:AddItem(beam, 0.3)
+        end)
+    end
+    
+    -- DISTORSIÓN ESPACIAL
+    for i = 1, 30 do
+        task.spawn(function()
+            local distortion = Instance.new("Part")
+            distortion.Shape = Enum.PartType.Ball
+            distortion.Size = Vector3.new(1, 1, 1)
+            distortion.Material = Enum.Material.Glass
+            distortion.Color = config.Color
+            distortion.Anchored = true
+            distortion.CanCollide = false
+            distortion.Transparency = 0.7
+            distortion.Parent = workspace
+            
+            local startPos = character.HumanoidRootPart.Position
+            local endPos = targetCharacter.HumanoidRootPart.Position
+            
+            for t = 0, 1, 0.05 do
+                if distortion and distortion.Parent then
+                    distortion.Position = startPos:Lerp(endPos, t) + Vector3.new(
+                        math.random(-5, 5),
+                        math.random(-5, 5),
+                        math.random(-5, 5)
+                    )
+                    distortion.Size = Vector3.new(1 + t * 3, 1 + t * 3, 1 + t * 3)
+                end
+                task.wait(0.05)
+            end
+            
+            distortion:Destroy()
+        end)
+    end
+    
+    -- EFECTO DE LEVITACIÓN
     local targetHumanoid = targetCharacter:FindFirstChild("Humanoid")
     if targetHumanoid then
         targetHumanoid.WalkSpeed = 0
@@ -418,7 +545,7 @@ local function useTelekinesis(player, targetPlayer)
         local bodyPosition = Instance.new("BodyPosition")
         bodyPosition.Name = "TelekinesisFloat"
         bodyPosition.MaxForce = Vector3.new(50000, 50000, 50000)
-        bodyPosition.Position = targetCharacter.HumanoidRootPart.Position + Vector3.new(0, 5, 0)
+        bodyPosition.Position = targetCharacter.HumanoidRootPart.Position + Vector3.new(0, 8, 0)
         bodyPosition.D = 1000
         bodyPosition.Parent = targetCharacter.HumanoidRootPart
         
@@ -432,6 +559,11 @@ local function useTelekinesis(player, targetPlayer)
             while time < config.Duration and bodyGyro.Parent do
                 time = time + 0.1
                 bodyGyro.CFrame = CFrame.Angles(math.sin(time * 2), time * 3, math.cos(time * 2))
+                bodyPosition.Position = targetCharacter.HumanoidRootPart.Position + Vector3.new(
+                    math.sin(time * 2) * 2,
+                    8 + math.sin(time * 4) * 2,
+                    math.cos(time * 2) * 2
+                )
                 task.wait(0.1)
             end
         end)
